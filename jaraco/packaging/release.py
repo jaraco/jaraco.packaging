@@ -25,7 +25,9 @@ except NameError:
     pass
 
 try:
+    dot = sys.path.pop(0)
     import keyring
+    sys.path.insert(0, dot)
 except Exception:
     pass
 
