@@ -16,6 +16,7 @@ import collections
 import itertools
 import re
 import json
+import importlib
 
 import requests
 
@@ -130,6 +131,12 @@ def bump_version(filename, target_ver):
 def load_config():
     with open('release.json') as config_stream:
         config.update(json.load(config_stream))
+    if not 'version' in config:
+        config['version'] = load_version_from_setup()
+
+def load_version_from_setup():
+    setup = importlib.import_module('setup')
+    return setup.setup_params['version']
 
 def do_release():
     config.update(load_config())
