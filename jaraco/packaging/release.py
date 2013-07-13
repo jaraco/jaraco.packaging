@@ -200,9 +200,7 @@ def upload_to_pypi():
         cmd.extend([
             'upload_docs', '-r', release.package_index
         ])
-    env = os.environ.copy()
-    env["SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES"] = "1"
-    subprocess.check_call(cmd, env=env)
+    subprocess.check_call(cmd)
 
 def upload_ez_setup():
     """
