@@ -15,7 +15,6 @@ import getpass
 import collections
 import itertools
 import re
-import json
 import importlib
 
 import requests
@@ -129,8 +128,8 @@ def bump_version(filename, target_ver):
         f.writelines(lines)
 
 def load_config():
-    with open('release.json') as config_stream:
-        config.update(json.load(config_stream))
+    with open('release.py') as config_stream:
+        exec(config_stream.read(), globals=config)
     if not 'version' in config:
         config['version'] = load_version_from_setup()
 
