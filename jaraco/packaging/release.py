@@ -13,7 +13,6 @@ import os
 import sys
 import getpass
 import collections
-import itertools
 import re
 import importlib
 
@@ -25,11 +24,6 @@ except NameError:
     pass
 
 try:
-    zip_longest = itertools.zip_longest
-except AttributeError:
-    zip_longest = itertools.izip_longest
-
-try:
     import keyring
 except Exception:
     pass
@@ -37,6 +31,7 @@ except Exception:
 config = dict(
     package_index='https://pypi.python.org/pypi',
     files_with_versions=['setup.py'],
+    before_upload=lambda: None,
 )
 "A dictionary describing settings for making the release"
 
@@ -165,6 +160,8 @@ def do_release():
 
     subprocess.check_call(['hg', 'update', config['version']])
 
+    config['before_upload']()
+
     upload_to_pypi()
     upload_ez_setup()
 
@@ -180,8 +177,6 @@ def do_release():
     add_milestone_and_version(next_ver)
 
 def upload_to_pypi():
-    linkify('CHANGES.txt', 'CHANGES (links).txt')
-
     has_docs = build_docs()
     if os.path.isdir('./dist'):
         shutil.rmtree('./dist')
@@ -230,60 +225,6 @@ def build_docs():
     ]
     subprocess.check_call(cmd, cwd='docs')
     return True
-
-def linkify(source, dest):
-    with open(source) as source:
-        out = _linkified_text(source.read())
-    with open(dest, 'w') as dest:
-        dest.write(out)
-
-def _linkified(rst_path):
-    "return contents of reStructureText file with linked issue references"
-    rst_file = open(rst_path)
-    rst_content = rst_file.read()
-    rst_file.close()
-
-    return _linkified_text(rst_content)
-
-def _linkified_text(rst_content):
-    # first identify any existing HREFs so they're not changed
-    HREF_pattern = re.compile('`.*?`_', re.MULTILINE | re.DOTALL)
-
-    # split on the HREF pattern, returning the parts to be linkified
-    plain_text_parts = HREF_pattern.split(rst_content)
-    anchors = []
-    linkified_parts = [_linkified_part(part, anchors)
-        for part in plain_text_parts]
-    pairs = zip_longest(
-        linkified_parts,
-        HREF_pattern.findall(rst_content),
-        fillvalue='',
-    )
-    rst_content = ''.join(flatten(pairs))
-
-    anchors = sorted(anchors)
-
-    bitroot = 'https://bitbucket.org/tarek/distribute'
-    rst_content += "\n"
-    for x in anchors:
-        issue = re.findall(r'\d+', x)[0]
-        rst_content += '.. _`%s`: %s/issue/%s\n' % (x, bitroot, issue)
-    rst_content += "\n"
-    return rst_content
-
-def flatten(listOfLists):
-    "Flatten one level of nesting"
-    return itertools.chain.from_iterable(listOfLists)
-
-
-def _linkified_part(text, anchors):
-    """
-    Linkify a part and collect any anchors generated
-    """
-    revision = re.compile(r'\b(issue\s+#?\d+)\b', re.M | re.I)
-
-    anchors.extend(revision.findall(text)) # ['Issue #43', ...]
-    return revision.sub(r'`\1`_', text)
 
 if __name__ == '__main__':
     do_release()
