@@ -15,6 +15,7 @@ import getpass
 import collections
 import itertools
 import re
+import json
 
 import requests
 
@@ -33,14 +34,17 @@ try:
 except Exception:
     pass
 
-VERSION = '0.10'
-PACKAGE_INDEX = 'https://pypi.python.org/pypi'
+config = dict(
+    package_index='https://pypi.python.org/pypi',
+    files_with_versions=['setup.py'],
+)
+"A dictionary describing settings for making the release"
 
 def set_versions():
-    global VERSION
-    version = input("Release as version [%s]> " % VERSION) or VERSION
-    if version != VERSION:
-        VERSION = bump_versions(version)
+    prompt = "Release as version [%(version)s]> " % config
+    version = input(prompt) or config['version']
+    if version != config['version']:
+        config['version'] = bump_versions(version)
 
 def infer_next_version(version):
     """
@@ -66,11 +70,6 @@ def infer_next_version(version):
         ver = int(match.group(0) or '0')
         return str(ver + 1)
     return re.sub('\d*$', incr, version)
-
-files_with_versions = (
-    'docs/conf.py', 'setup.py', 'release.py', 'ez_setup.py',
-    'setuptools/__init__.py',
-)
 
 def get_repo_name():
     """
@@ -111,7 +110,7 @@ def add_milestone_and_version(version):
         resp.raise_for_status()
 
 def bump_versions(target_ver):
-    for filename in files_with_versions:
+    for filename in config['files_with_versions']:
         bump_version(filename, target_ver)
     subprocess.check_call(['hg', 'ci', '-m',
         'Bumped to {target_ver} in preparation for next '
@@ -119,16 +118,23 @@ def bump_versions(target_ver):
     return target_ver
 
 def bump_version(filename, target_ver):
+    orig_ver = config['version']
     with open(filename, 'rb') as f:
         lines = [
-            line.replace(VERSION.encode('ascii'), target_ver.encode('ascii'))
+            line.replace(orig_ver.encode('ascii'), target_ver.encode('ascii'))
             for line in f
         ]
     with open(filename, 'wb') as f:
         f.writelines(lines)
 
+def load_config():
+    with open('release.json') as config_stream:
+        config.update(json.load(config_stream))
+
 def do_release():
-    assert all(map(os.path.exists, files_with_versions)), (
+    config.update(load_config())
+
+    assert all(map(os.path.exists, config['files_with_versions'])), (
         "Expected file(s) missing")
 
     assert has_sphinx(), "You must have Sphinx installed to release"
@@ -149,9 +155,9 @@ def do_release():
         print("Please do that")
         raise SystemExit(2)
 
-    subprocess.check_call(['hg', 'tag', VERSION])
+    subprocess.check_call(['hg', 'tag', config['version']])
 
-    subprocess.check_call(['hg', 'update', VERSION])
+    subprocess.check_call(['hg', 'update', config['version']])
 
     upload_to_pypi()
     upload_ez_setup()
@@ -160,7 +166,7 @@ def do_release():
     subprocess.check_call(['hg', 'update'])
 
     # we just tagged the current version, bump for the next release.
-    next_ver = bump_versions(infer_next_version(VERSION))
+    next_ver = bump_versions(infer_next_version(config['version']))
 
     # push the changes
     subprocess.check_call(['hg', 'push'])
@@ -177,12 +183,12 @@ def upload_to_pypi():
         sys.executable, 'setup.py', '-q',
         'egg_info', '-RD', '-b', '',
         'sdist',
-        'register', '-r', PACKAGE_INDEX,
-        'upload', '-r', PACKAGE_INDEX,
+        'register', '-r', config['package_index'],
+        'upload', '-r', config['package_index'],
     ]
     if has_docs:
         cmd.extend([
-            'upload_docs', '-r', PACKAGE_INDEX
+            'upload_docs', '-r', config['package_index']
         ])
     env = os.environ.copy()
     env["SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES"] = "1"
