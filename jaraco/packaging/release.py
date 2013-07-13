@@ -5,7 +5,7 @@ Script to fully automate the release process. Requires Python 2.6+
 with sphinx installed and the 'hg' command on the path.
 """
 
-from __future__ import print_function
+from __future__ import print_function, absolute_import
 
 import subprocess
 import shutil
@@ -15,6 +15,7 @@ import getpass
 import collections
 import re
 import importlib
+import imp
 
 import requests
 
@@ -28,18 +29,24 @@ try:
 except Exception:
     pass
 
-config = dict(
+# each package may provide this module to override default behavior
+try:
+    import release
+except ImportError:
+    release = imp.new_module('release')
+
+defaults = dict(
     package_index='https://pypi.python.org/pypi',
     files_with_versions=['setup.py'],
     before_upload=lambda: None,
 )
-"A dictionary describing settings for making the release"
+"Default release definition"
 
 def set_versions():
-    prompt = "Release as version [%(version)s]> " % config
-    version = input(prompt) or config['version']
-    if version != config['version']:
-        config['version'] = bump_versions(version)
+    prompt = "Release as version [%(version)s]> " % vars(release)
+    version = input(prompt) or release.version
+    if version != release.version:
+        release.version = bump_versions(version)
 
 def infer_next_version(version):
     """
@@ -105,7 +112,7 @@ def add_milestone_and_version(version):
         resp.raise_for_status()
 
 def bump_versions(target_ver):
-    for filename in config['files_with_versions']:
+    for filename in release.files_with_versions:
         bump_version(filename, target_ver)
     subprocess.check_call(['hg', 'ci', '-m',
         'Bumped to {target_ver} in preparation for next '
@@ -113,7 +120,7 @@ def bump_versions(target_ver):
     return target_ver
 
 def bump_version(filename, target_ver):
-    orig_ver = config['version']
+    orig_ver = release.version
     with open(filename, 'rb') as f:
         lines = [
             line.replace(orig_ver.encode('ascii'), target_ver.encode('ascii'))
@@ -122,20 +129,20 @@ def bump_version(filename, target_ver):
     with open(filename, 'wb') as f:
         f.writelines(lines)
 
-def load_config():
-    with open('release.py') as config_stream:
-        exec(config_stream.read(), globals=config)
-    if not 'version' in config:
-        config['version'] = load_version_from_setup()
+def load_defaults():
+    for key in defaults:
+        vars(release).setdefault(key, defaults[key])
+    if not 'version' in vars(release):
+        release.version = load_version_from_setup()
 
 def load_version_from_setup():
     setup = importlib.import_module('setup')
     return setup.setup_params['version']
 
 def do_release():
-    config.update(load_config())
+    load_defaults()
 
-    assert all(map(os.path.exists, config['files_with_versions'])), (
+    assert all(map(os.path.exists, release.files_with_versions)), (
         "Expected file(s) missing")
 
     assert has_sphinx(), "You must have Sphinx installed to release"
@@ -143,24 +150,25 @@ def do_release():
     set_versions()
 
     res = input('Have you read through the SCM changelog and '
-        'confirmed the changelog is current for releasing {VERSION}? '
-        .format(**globals()))
+        'confirmed the changelog is current for releasing {version}? '
+        .format(**vars(release)))
     if not res.lower().startswith('y'):
         print("Please do that")
         raise SystemExit(1)
 
-    print("Travis-CI tests: http://travis-ci.org/#!/jaraco/setuptools")
+    if 'test_info' in vars(release):
+        print(release.test_info)
     res = input('Have you or has someone verified that the tests '
         'pass on this revision? ')
     if not res.lower().startswith('y'):
         print("Please do that")
         raise SystemExit(2)
 
-    subprocess.check_call(['hg', 'tag', config['version']])
+    subprocess.check_call(['hg', 'tag', release.version])
 
-    subprocess.check_call(['hg', 'update', config['version']])
+    subprocess.check_call(['hg', 'update', release.version])
 
-    config['before_upload']()
+    release.before_upload()
 
     upload_to_pypi()
     upload_ez_setup()
@@ -169,7 +177,7 @@ def do_release():
     subprocess.check_call(['hg', 'update'])
 
     # we just tagged the current version, bump for the next release.
-    next_ver = bump_versions(infer_next_version(config['version']))
+    next_ver = bump_versions(infer_next_version(release.version))
 
     # push the changes
     subprocess.check_call(['hg', 'push'])
@@ -184,12 +192,12 @@ def upload_to_pypi():
         sys.executable, 'setup.py', '-q',
         'egg_info', '-RD', '-b', '',
         'sdist',
-        'register', '-r', config['package_index'],
-        'upload', '-r', config['package_index'],
+        'register', '-r', release.package_index,
+        'upload', '-r', release.package_index,
     ]
     if has_docs:
         cmd.extend([
-            'upload_docs', '-r', config['package_index']
+            'upload_docs', '-r', release.package_index
         ])
     env = os.environ.copy()
     env["SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES"] = "1"
