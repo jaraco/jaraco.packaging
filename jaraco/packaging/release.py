@@ -38,7 +38,6 @@ except ImportError:
 defaults = dict(
     package_index='https://pypi.python.org/pypi',
     files_with_versions=['setup.py'],
-    before_upload=lambda: None,
 )
 "Default release definition"
 
@@ -168,7 +167,7 @@ def do_release():
 
     subprocess.check_call(['hg', 'update', release.version])
 
-    release.before_upload()
+    getattr(release, 'before_upload', lambda: None)()
 
     upload_to_pypi()
     upload_ez_setup()
