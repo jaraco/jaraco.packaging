@@ -181,7 +181,8 @@ def do_release():
     next_ver = bump_versions(infer_next_version(release.version))
 
     # push the changes
-    subprocess.check_call(['hg', 'push'])
+    push_command = getattr(release, 'push_command', ['hg', 'push'])
+    subprocess.check_call(push_command)
 
     add_milestone_and_version(next_ver)
 
