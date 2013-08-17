@@ -146,7 +146,8 @@ def do_release():
     assert all(map(os.path.exists, release.files_with_versions)), (
         "Expected file(s) missing")
 
-    assert has_sphinx(), "You must have Sphinx installed to release"
+    # check for sphinx in advance
+    has_docs()
 
     set_versions()
 
@@ -186,7 +187,6 @@ def do_release():
     add_milestone_and_version(next_ver)
 
 def upload_to_pypi():
-    has_docs = build_docs()
     if os.path.isdir('./dist'):
         shutil.rmtree('./dist')
     cmd = [
@@ -196,34 +196,29 @@ def upload_to_pypi():
         'register', '-r', release.package_index,
         'upload', '-r', release.package_index,
     ]
-    if has_docs:
+    if has_docs():
         cmd.extend([
+            'build_sphinx',
             'upload_docs', '-r', release.package_index
         ])
     subprocess.check_call(cmd)
 
 def has_sphinx():
     try:
-        devnull = open(os.path.devnull, 'wb')
-        subprocess.Popen(['sphinx-build', '--version'], stdout=devnull,
-            stderr=subprocess.STDOUT).wait()
-    except Exception:
+        importlib.import_module('sphinx')
+    except ImportError:
         return False
     return True
 
-def build_docs():
+def has_docs():
     if not os.path.isdir('docs'):
-        return
+        return False
+
+    assert has_sphinx(), "You must have Sphinx installed to release"
+
     if os.path.isdir('docs/build'):
         shutil.rmtree('docs/build')
-    cmd = [
-        'sphinx-build',
-        '-b', 'html',
-        '-d', 'build/doctrees',
-        '.',
-        'build/html',
-    ]
-    subprocess.check_call(cmd, cwd='docs')
+
     return True
 
 if __name__ == '__main__':
