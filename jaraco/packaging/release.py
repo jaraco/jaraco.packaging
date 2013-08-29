@@ -103,7 +103,13 @@ def get_mercurial_creds(system='https://bitbucket.org', username=None):
     Credential = collections.namedtuple('Credential', 'username password')
     return Credential(username, password)
 
+def is_bitbucket_project():
+    default = subprocess.check_output('hg paths default').strip().decode('utf-8')
+    return default.startswith('bb://') or 'bitbucket.org' in default
+
 def add_milestone_and_version(version):
+    if not is_bitbucket_project():
+        return
     base = 'https://api.bitbucket.org'
     for type in 'milestones', 'versions':
         url = (base + '/1.0/repositories/{repo}/issues/{type}'
@@ -178,7 +184,9 @@ def do_release():
     subprocess.check_call(['hg', 'update'])
 
     # we just tagged the current version, bump for the next release.
-    next_ver = bump_versions(infer_next_version(release.version))
+    default_bump = lambda ver: bump_versions(infer_next_version(ver))
+    bump = getattr(release, 'post_release_bump', default_bump)
+    next_ver = bump(release.version)
 
     # push the changes
     subprocess.check_call(['hg', 'push'])
