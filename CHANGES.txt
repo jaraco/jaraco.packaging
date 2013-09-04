@@ -1,0 +1,5 @@
+2.2
+===
+
+Added ``depends`` module implementing a ``dependency-tree`` command and
+also a distutils Command ``dependency_tree``.
