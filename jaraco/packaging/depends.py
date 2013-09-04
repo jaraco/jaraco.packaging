@@ -2,7 +2,7 @@
 This module should only import modules from stdlib and setuptools
 """
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 import os
 import re
@@ -10,6 +10,8 @@ import argparse
 import subprocess
 
 import pkg_resources
+
+text_type = getattr(__builtins__, 'unicode', str)
 
 def tree_cmd():
     parser = argparse.ArgumentParser()
@@ -30,7 +32,7 @@ def print_package(requirement, indent):
 
 def parse_extras(req):
     pattern = re.compile('\[(.*)\]')
-    res = pattern.search(unicode(req))
+    res = pattern.search(text_type(req))
     return res.group(1).split(',') if res else []
 
 def check_dependencies(req, indent=1, history=None):
