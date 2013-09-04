@@ -9,16 +9,19 @@ import re
 import argparse
 import subprocess
 
+import setuptools
 import pkg_resources
 
 text_type = getattr(__builtins__, 'unicode', str)
 
+req_help = ("A setuptools requirement spec (e.g. 'eggmonster' or "
+    "'eggmonster==0.1')")
+python_help = "Use a remote environment rather than the local one."
+
 def tree_cmd():
     parser = argparse.ArgumentParser()
-    parser.add_argument('requirement', help="A setuptools requirement "
-        "spec (e.g. 'eggmonster' or 'eggmonster==0.1')")
-    parser.add_argument('--python', help="Use a remote environment rather "
-        "than the local one.")
+    parser.add_argument('requirement', help=req_help)
+    parser.add_argument('--python', help=python_help)
     args = parser.parse_args()
     if args.python:
         return check_dependencies_remote(args)
@@ -52,6 +55,25 @@ def check_dependencies(req, indent=1, history=None):
     for r in d.requires(extras=extras):
         print_package(r, indent)
         check_dependencies(r, indent + 1, history)
+
+class DependencyTree(setuptools.Command):
+    description = "Report a tree of resolved dependencies"
+    user_options = [
+        ('requirement=', 'r', req_help),
+        ('python=', 'p', python_help),
+    ]
+
+    def finalize_options(self):
+        pass
+
+    def initialize_options(self):
+        self.requirement = self.distribution.get_name()
+        self.python = None
+
+    def run(self):
+        if self.python:
+            return check_dependencies_remote(self)
+        check_dependencies(self.requirement)
 
 def check_dependencies_remote(args):
     """

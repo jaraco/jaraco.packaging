@@ -8,7 +8,7 @@ with open('README.txt') as readme:
 with open('CHANGES.txt') as changes:
 	long_description += '\n\n' + changes.read()
 
-argparse_req = ['argparse'] if sys.version < (2,7) else []
+argparse_req = ['argparse'] if sys.version_info < (2,7) else []
 
 setup_params = dict(
 	name='jaraco.packaging',
@@ -23,6 +23,9 @@ setup_params = dict(
 	entry_points={
 		'console_scripts': [
 			'dependency-tree=jaraco.packaging.depends:tree_cmd',
+		],
+		'distutils.commands': [
+			'dependency_tree=jaraco.packaging.depends:DependencyTree',
 		],
 	},
 	zip_safe=False,
