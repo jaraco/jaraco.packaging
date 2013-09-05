@@ -59,8 +59,8 @@ def check_dependencies(req, indent=1, history=None):
 class DependencyTree(setuptools.Command):
     description = "Report a tree of resolved dependencies"
     user_options = [
-        ('requirement=', 'r', req_help),
-        ('python=', 'p', python_help),
+        (str('requirement='), str('r'), req_help),
+        (str('python='), str('p'), python_help),
     ]
 
     def finalize_options(self):
