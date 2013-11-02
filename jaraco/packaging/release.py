@@ -40,6 +40,7 @@ except ImportError:
 defaults = dict(
     package_index='https://pypi.python.org/pypi',
     files_with_versions=['setup.py'],
+    dist_commands=('sdist',),
 )
 "Default release definition"
 
@@ -202,7 +203,7 @@ def upload_to_pypi():
     cmd = [
         sys.executable, 'setup.py', '-q',
         'egg_info', '-RD', '-b', '',
-        'sdist',
+    ] + release.dist_commands + [
         'register', '-r', release.package_index,
         'upload', '-r', release.package_index,
     ]
