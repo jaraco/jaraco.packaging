@@ -203,7 +203,7 @@ def upload_to_pypi():
     cmd = [
         sys.executable, 'setup.py', '-q',
         'egg_info', '-RD', '-b', '',
-    ] + release.dist_commands + [
+    ] + list(release.dist_commands) + [
         'register', '-r', release.package_index,
         'upload', '-r', release.package_index,
     ]
