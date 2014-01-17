@@ -14,13 +14,7 @@ import distutils.command.upload
 import distutils.dist
 
 import six
-
-try:
-    import urllib.request as urllib_request
-    import urllib.parse as urllib_parse
-except ImportError:
-    import urllib2 as urllib_request
-    import urlparse as urllib_parse
+from six.moves import urllib
 
 DistFile = collections.namedtuple('DistFile', 'command pyversion filename')
 
@@ -94,9 +88,9 @@ class RevivedDistribution(distutils.dist.Distribution):
         self._update_dist_files()
 
     def _load_metadata(self):
-        parsed = urllib_parse.urlparse(self.source_url)
+        parsed = urllib.parse.urlparse(self.source_url)
         self.filename = parsed.path
-        stream = io.BytesIO(urllib_request.urlopen(self.source_url).read())
+        stream = io.BytesIO(urllib.request.urlopen(self.source_url).read())
         # a little workaround for the eggmonster filename munging
         if is_targz(self.filename) and looks_like_zip(stream):
             self.filename = force_zip_extension(self.filename)
@@ -117,7 +111,7 @@ class RevivedDistribution(distutils.dist.Distribution):
         self._clean_metadata()
 
     def _is_remote(self):
-        parsed = urllib_parse.urlparse(self.source_url)
+        parsed = urllib.parse.urlparse(self.source_url)
         return parsed.scheme.lower() != 'file'
 
     def _clean_metadata(self):
@@ -174,7 +168,7 @@ def URL(spec):
     If spec already looks like a URL, just return it. Otherwise, assume
     it is a filename and return it as a file url.
     """
-    if urllib_parse.urlparse(spec).scheme: return spec
+    if urllib.parse.urlparse(spec).scheme: return spec
     return 'file:'+spec
 
 def get_args():

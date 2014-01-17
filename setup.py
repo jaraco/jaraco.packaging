@@ -32,6 +32,7 @@ setup_params = dict(
 	zip_safe=False,
 	install_requires=[
 		'requests',
+		'six>=1.4,<2dev',
 	] + argparse_req,
 	setup_requires=[
 		'hgtools',
