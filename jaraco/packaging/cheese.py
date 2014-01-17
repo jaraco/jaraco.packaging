@@ -31,26 +31,6 @@ class TarGZAdapter(object):
     def namelist(self):
         return self.archive.getnames()
 
-def looks_like_zip(stream):
-    """
-    Peek into the stream and tell me if it looks like a zip file
-    """
-    first_two_bytes = stream.read(2)
-    stream.seek(0)
-    return first_two_bytes == 'PK'
-
-def is_targz(filename):
-    return filename.endswith('.tar.gz') or filename.endswith('.tgz')
-
-def force_zip_extension(filename):
-    """
-    If the file is named .tar.gz or .tgz, give it a zip extension
-    """
-    filename, ext = os.path.splitext(filename)
-    if filename.endswith('.tar'):
-        filename, ext = os.path.splitext(filename)
-    return filename + '.zip'
-
 def open_archive(stream, filename):
     """
     Open an archive (tarball or zip) and return the object.
@@ -91,9 +71,6 @@ class RevivedDistribution(distutils.dist.Distribution):
         parsed = urllib.parse.urlparse(self.source_url)
         self.filename = parsed.path
         stream = io.BytesIO(urllib.request.urlopen(self.source_url).read())
-        # a little workaround for the eggmonster filename munging
-        if is_targz(self.filename) and looks_like_zip(stream):
-            self.filename = force_zip_extension(self.filename)
         if self._is_remote():
             # distutils expects the file to be on the file system; make it so
             self.filename = os.path.basename(self.filename)
