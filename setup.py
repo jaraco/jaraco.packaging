@@ -23,6 +23,7 @@ setup_params = dict(
 	entry_points={
 		'console_scripts': [
 			'dependency-tree=jaraco.packaging.depends:tree_cmd',
+			'upload-package=jaraco.packaging.cheese:do_upload',
 		],
 		'distutils.commands': [
 			'dependency_tree=jaraco.packaging.depends:DependencyTree',

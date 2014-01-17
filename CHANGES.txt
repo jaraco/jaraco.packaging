@@ -1,3 +1,9 @@
+2.4
+===
+
+Added ``jaraco.packaging.cheese`` and the ``upload-package`` command from the
+YouGov project of the same namesake.
+
 2.3
 ===
 
