@@ -187,7 +187,7 @@ def do_release():
     next_ver = bump(release.version)
 
     # push the changes
-    subprocess.check_call(['hg', 'push'])
+    subprocess.check_call(['hg', 'push', '-r', '.'])
 
     after_push = getattr(release, 'after_push', lambda: None)
     after_push()
