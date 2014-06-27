@@ -114,7 +114,9 @@ def add_milestone_and_version(version):
             .format(repo = get_repo_name(), type=type))
         resp = requests.post(url=url,
             data='name='+version, auth=get_mercurial_creds())
-        resp.raise_for_status()
+        if not resp.ok:
+            msg = "Failed to add {type}: {version}".format(**vars())
+            print(msg, file=sys.stderr)
 
 def bump_versions(target_ver):
     for filename in release.files_with_versions:
