@@ -19,10 +19,7 @@ import imp
 
 import requests
 
-try:
-    input = raw_input
-except NameError:
-    pass
+from six.moves import input
 
 try:
     dot = sys.path.pop(0)
