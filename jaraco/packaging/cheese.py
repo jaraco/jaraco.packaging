@@ -96,7 +96,10 @@ class RevivedDistribution(distutils.dist.Distribution):
         the long description doesn't load properly (gets unwanted indents),
         so fix it.
         """
-        lines = io.StringIO(self.metadata.get_long_description())
+        desc = self.metadata.get_long_description()
+        if not isinstance(desc, six.text_type):
+            desc = desc.decode('utf-8')
+        lines = io.StringIO(desc)
         def trim_eight_spaces(line):
             if line.startswith(' '*8):
                 line = line[8:]
