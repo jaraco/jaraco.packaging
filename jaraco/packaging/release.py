@@ -76,7 +76,8 @@ def get_repo_name():
     """
     Get the repo name from the hgrc default path.
     """
-    default = subprocess.check_output('hg paths default').strip().decode('utf-8')
+    cmd = 'hg paths default'.split()
+    default = subprocess.check_output(cmd).strip().decode('utf-8')
     parts = default.split('/')
     if parts[-1] == '':
         parts.pop()
