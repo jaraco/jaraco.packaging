@@ -28,6 +28,9 @@ setup_params = dict(
 		'distutils.commands': [
 			'dependency_tree=jaraco.packaging.depends:DependencyTree',
 		],
+		'pmxbot_handlers': [
+			'cheeseshop uploader=jaraco.packaging.pmxbot',
+		],
 	},
 	zip_safe=False,
 	install_requires=[
