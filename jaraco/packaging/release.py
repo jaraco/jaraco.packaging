@@ -76,8 +76,7 @@ def get_repo_name():
     """
     Get the repo name from the hgrc default path.
     """
-    cmd = 'hg paths default'.split()
-    default = subprocess.check_output(cmd).strip().decode('utf-8')
+    default = _get_default_path()
     parts = default.split('/')
     if parts[-1] == '':
         parts.pop()
@@ -102,8 +101,13 @@ def get_mercurial_creds(system='https://bitbucket.org', username=None):
     Credential = collections.namedtuple('Credential', 'username password')
     return Credential(username, password)
 
+def _get_default_path():
+    cmd = 'hg', 'paths', 'default'
+    subprocess.check_output(cmd).strip().decode('utf-8')
+
+
 def is_bitbucket_project():
-    default = subprocess.check_output('hg paths default').strip().decode('utf-8')
+    default = _get_default_path()
     return default.startswith('bb://') or 'bitbucket.org' in default
 
 def add_milestone_and_version(version):
