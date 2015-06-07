@@ -103,7 +103,7 @@ def get_mercurial_creds(system='https://bitbucket.org', username=None):
 
 def _get_default_path():
     cmd = 'hg', 'paths', 'default'
-    subprocess.check_output(cmd).strip().decode('utf-8')
+    return subprocess.check_output(cmd).strip().decode('utf-8')
 
 
 def is_bitbucket_project():
