@@ -59,7 +59,7 @@ def infer_next_version(version):
     '1.0b1'
 
     >>> infer_next_version('1.0.10')
-    '1.0.10'
+    '1.0.11'
 
     >>> infer_next_version('1')
     '2'
