@@ -1,3 +1,8 @@
+2.7
+===
+
+Added ``--register`` option to ``upload-package`` command.
+
 2.4
 ===
 
