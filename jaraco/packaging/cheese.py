@@ -11,6 +11,7 @@ import tarfile
 import io
 import itertools
 import distutils.command.upload
+import distutils.command.register
 import distutils.dist
 
 import six
@@ -135,13 +136,22 @@ class RevivedDistribution(distutils.dist.Distribution):
 
 def upload_file(repository, source, **command_params):
     distribution = RevivedDistribution(source)
+    upload_dist(repository, distribution, **command_params)
+
+def upload_dist(repository, distribution, **command_params):
     cmd = distutils.command.upload.upload(distribution)
     cmd.initialize_options()
     cmd.repository = repository
     cmd.finalize_options()
     vars(cmd).update(**command_params)
     cmd.run()
-    distribution.cleanup()
+
+def register_dist(repository, distribution):
+    cmd = distutils.command.register.register(distribution)
+    cmd.initialize_options()
+    cmd.repository = repository
+    cmd.finalize_options()
+    cmd.run()
 
 def URL(spec):
     """
@@ -155,11 +165,16 @@ def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('source', type=URL)
     parser.add_argument('-r', '--repository', default=None)
+    parser.add_argument('--register', default=False, action='store_true')
     return parser.parse_args()
 
 def do_upload():
     args = get_args()
-    upload_file(args.repository, args.source)
+    distribution = RevivedDistribution(args.source)
+    if args.register:
+        register_dist(args.repository, distribution)
+    upload_dist(args.repository, distribution)
+    distribution.cleanup()
 
 if __name__ == '__main__':
     do_upload()
