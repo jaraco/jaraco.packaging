@@ -63,7 +63,7 @@ def load_dependencies(req, history=None):
     if history is None: history = set()
     dist = pkg_resources.get_distribution(req)
     spec = dict(
-        requirement=req,
+        requirement=str(req),
         resolved=str(dist),
     )
     if req not in history:
