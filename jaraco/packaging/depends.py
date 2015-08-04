@@ -61,18 +61,22 @@ def load_dependencies(req, history=None):
     Load the dependency tree as a Python object tree.
     """
     if history is None: history = set()
-    if req in history: return dict(requirement=req)
-    history.add(req)
     dist = pkg_resources.get_distribution(req)
-    extras = parse_extras(req)
-    return dict(
+    spec = dict(
         requirement=req,
         resolved=str(dist),
-        depends=[
-            load_dependencies(dep, history=history)
-            for dep in dist.requires(extras=extras)
-        ],
     )
+    if req not in history:
+        # traverse into children
+        history.add(req)
+        extras = parse_extras(req)
+        spec.update(
+            depends=[
+                load_dependencies(dep, history=history)
+                for dep in dist.requires(extras=extras)
+            ],
+        )
+    return spec
 
 class DependencyTree(setuptools.Command):
     description = "Report a tree of resolved dependencies"
