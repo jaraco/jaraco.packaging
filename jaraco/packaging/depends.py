@@ -58,7 +58,12 @@ def check_dependencies(req, indent=1, history=None):
 
 def load_dependencies(req, history=None):
     """
-    Load the dependency tree as a Python object tree.
+    Load the dependency tree as a Python object tree,
+    suitable for JSON serialization.
+
+    >>> deps = load_dependencies('jaraco.packaging')
+    >>> import json
+    >>> doc = json.dumps(deps)
     """
     if history is None: history = set()
     dist = pkg_resources.get_distribution(req)
