@@ -56,6 +56,24 @@ def check_dependencies(req, indent=1, history=None):
         print_package(r, indent)
         check_dependencies(r, indent + 1, history)
 
+def load_dependencies(req, history=None):
+    """
+    Load the dependency tree as a Python object tree.
+    """
+    if history is None: history = set()
+    if req in history: return dict(requirement=req)
+    history.add(req)
+    dist = pkg_resources.get_distribution(req)
+    extras = parse_extras(req)
+    return dict(
+        requirement=req,
+        resolved=str(dist),
+        depends=[
+            load_dependencies(dep, history=history)
+            for dep in dist.requires(extras=extras)
+        ],
+    )
+
 class DependencyTree(setuptools.Command):
     description = "Report a tree of resolved dependencies"
     user_options = [
