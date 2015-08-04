@@ -70,12 +70,11 @@ def load_dependencies(req, history=None):
         # traverse into children
         history.add(req)
         extras = parse_extras(req)
-        spec.update(
-            depends=[
-                load_dependencies(dep, history=history)
-                for dep in dist.requires(extras=extras)
-            ],
-        )
+        depends = [
+            load_dependencies(dep, history=history)
+            for dep in dist.requires(extras=extras)
+        ]
+        if depends: spec.update(depends=depends)
     return spec
 
 class DependencyTree(setuptools.Command):
