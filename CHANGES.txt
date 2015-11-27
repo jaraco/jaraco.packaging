@@ -1,3 +1,9 @@
+2.9
+===
+
+Add ``show`` distutils command for showing attributes of the
+distribution.
+
 2.8
 ===
 
