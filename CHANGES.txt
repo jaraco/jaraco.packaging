@@ -1,3 +1,11 @@
+2.10
+====
+
+``release`` script no longer invokes register prior to the
+upload. Instead, the user should either set the password
+in .pypirc (not recommended) or use Setuptools 20.1 and
+keyring to store the password securely.
+
 2.9
 ===
 

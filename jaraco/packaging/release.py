@@ -208,7 +208,6 @@ def upload_to_pypi():
         sys.executable, 'setup.py', '-q',
         'egg_info', '-RD', '-b', '',
     ] + list(release.dist_commands) + [
-        'register', '-r', release.package_index,
         'upload', '-r', release.package_index,
     ]
     if has_docs():
