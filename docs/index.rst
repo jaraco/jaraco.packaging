@@ -1,5 +1,5 @@
 Welcome to jaraco.packaging documentation!
-========================================
+==========================================
 
 .. toctree::
    :maxdepth: 1
