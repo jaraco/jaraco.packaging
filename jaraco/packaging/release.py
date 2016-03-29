@@ -151,6 +151,17 @@ def load_version_from_setup():
     setup = importlib.import_module('setup')
     return setup.setup_params['version']
 
+def save_bookmark():
+    """
+    If a bookmark is active, return it, else None
+    """
+    cmd = ['hg', 'bookmark']
+    res = subprocess.check_output(cmd, universal_newlines=True)
+    active = r'^ \* (?P<name>.+?)\s+\d+:(?P<rev>[0-9a-f]+)$'
+    exp = re.compile(active, flags=re.MULTILINE)
+    search_res = exp.search(res)
+    return search_res and search_res.group('name')
+
 def do_release():
     load_defaults()
 
@@ -179,6 +190,8 @@ def do_release():
 
     subprocess.check_call(['hg', 'tag', release.version])
 
+    bookmark = save_bookmark()
+
     subprocess.check_call(['hg', 'update', release.version])
 
     getattr(release, 'before_upload', lambda: None)()
@@ -186,7 +199,10 @@ def do_release():
     upload_to_pypi()
 
     # update to the tip for the next operation
-    subprocess.check_call(['hg', 'update'])
+    cmd = ['hg', 'update']
+    if bookmark:
+        cmd += [bookmark]
+    subprocess.check_call(cmd)
 
     # we just tagged the current version, bump for the next release.
     default_bump = lambda ver: bump_versions(infer_next_version(ver))
