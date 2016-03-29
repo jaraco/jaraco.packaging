@@ -1,3 +1,11 @@
+2.11
+====
+
+Moved hosting to Github.
+
+Add support for retaining the active bookmark after
+updating to tagged revision for release.
+
 2.10
 ====
 
