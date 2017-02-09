@@ -1,3 +1,8 @@
+3.0
+===
+
+Removed pmxbot uploader.
+
 2.11
 ====
 

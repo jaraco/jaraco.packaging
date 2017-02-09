@@ -48,9 +48,6 @@ params = dict(
 			'dependency_tree=jaraco.packaging.depends:DependencyTree',
 			'show=jaraco.packaging.info:Show',
 		],
-		'pmxbot_handlers': [
-			'cheeseshop uploader=jaraco.packaging.pmxbot',
-		],
 	},
 )
 if __name__ == '__main__':
