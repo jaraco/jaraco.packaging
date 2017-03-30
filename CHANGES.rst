@@ -1,3 +1,9 @@
+3.1
+===
+
+Added  Sphinx extension for loading several keys from
+their package metadata.
+
 3.0
 ===
 

@@ -46,3 +46,22 @@ Note that passing -q suppresses the "running show" message.
 Attributes may be specified as comma-separated or space-separated keys.
 Results are printed using ``subprocess.list2cmdline`` so may be parsed using
 ``shlex.split``. By default, 'name' and 'version' are printed.
+
+sphinx
+======
+
+This package provides a Sphinx extension that will inject into the config
+the following values from the project's package metadata (as presented by
+distutils):
+
+ - project (from name)
+ - author
+ - copyright (same as author)
+ - version
+ - release (same as version)
+ - package_url (from url)
+
+To enable, include 'jaraco.packaging' in your requirements and add
+'jaraco.packaging.sphinx' to your list of extensions in your config file::
+
+    extensions=['jaraco.packaging.sphinx']
