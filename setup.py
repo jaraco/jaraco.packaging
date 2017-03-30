@@ -24,7 +24,7 @@ params = dict(
 	include_package_data=True,
 	namespace_packages=name.split('.')[:-1],
 	install_requires=[
-		'six>=1.4,<2dev',
+		'six>=1.4',
 	],
 	extras_require={
 		':python_version=="2.6"': [
