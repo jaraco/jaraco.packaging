@@ -1,3 +1,8 @@
+4.0
+===
+
+Remove ``release`` module.
+
 3.2
 ===
 
