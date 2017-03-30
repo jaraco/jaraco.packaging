@@ -28,6 +28,9 @@ params = dict(
 		'six>=1.4,<2dev',
 	],
 	extras_require={
+		':python_version=="2.6"': [
+			'subprocess32',
+		],
 	},
 	setup_requires=[
 		'setuptools_scm>=1.15.0',
@@ -36,6 +39,7 @@ params = dict(
 		"Development Status :: 5 - Production/Stable",
 		"Intended Audience :: Developers",
 		"License :: OSI Approved :: MIT License",
+		"Programming Language :: Python :: 2.6",
 		"Programming Language :: Python :: 2.7",
 		"Programming Language :: Python :: 3",
 		"Framework :: Sphinx :: Extension",

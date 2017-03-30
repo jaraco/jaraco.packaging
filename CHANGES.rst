@@ -1,7 +1,12 @@
+3.2
+===
+
+Add Python 2.6 support for Sphinx extension.
+
 3.1
 ===
 
-Added  Sphinx extension for loading several keys from
+Added Sphinx extension for loading several keys from
 their package metadata.
 
 3.0
