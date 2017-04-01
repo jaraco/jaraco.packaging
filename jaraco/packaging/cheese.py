@@ -19,6 +19,7 @@ from six.moves import urllib
 
 DistFile = collections.namedtuple('DistFile', 'command pyversion filename')
 
+
 class TarGZAdapter(object):
     """
     Wrap a TarFile object to emulate a ZipFile object
@@ -32,6 +33,7 @@ class TarGZAdapter(object):
     def namelist(self):
         return self.archive.getnames()
 
+
 def open_archive(stream, filename):
     """
     Open an archive (tarball or zip) and return the object.
@@ -42,6 +44,7 @@ def open_archive(stream, filename):
     cls = [zipfile.ZipFile, targz_handler]['gz' in ext]
     archive = cls(stream)
     return archive
+
 
 def get_prefix_dir(archive):
     """
@@ -134,9 +137,11 @@ class RevivedDistribution(distutils.dist.Distribution):
         if self._is_remote():
             os.remove(self.filename)
 
+
 def upload_file(repository, source, **command_params):
     distribution = RevivedDistribution(source)
     upload_dist(repository, distribution, **command_params)
+
 
 def upload_dist(repository, distribution, **command_params):
     cmd = distutils.command.upload.upload(distribution)
@@ -146,12 +151,14 @@ def upload_dist(repository, distribution, **command_params):
     vars(cmd).update(**command_params)
     cmd.run()
 
+
 def register_dist(repository, distribution):
     cmd = distutils.command.register.register(distribution)
     cmd.initialize_options()
     cmd.repository = repository
     cmd.finalize_options()
     cmd.run()
+
 
 def URL(spec):
     """
@@ -161,12 +168,14 @@ def URL(spec):
     if urllib.parse.urlparse(spec).scheme: return spec
     return 'file:'+spec
 
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('source', type=URL)
     parser.add_argument('-r', '--repository', default=None)
     parser.add_argument('--register', default=False, action='store_true')
     return parser.parse_args()
+
 
 def do_upload():
     args = get_args()
@@ -175,6 +184,7 @@ def do_upload():
         register_dist(args.repository, distribution)
     upload_dist(args.repository, distribution)
     distribution.cleanup()
+
 
 if __name__ == '__main__':
     do_upload()
