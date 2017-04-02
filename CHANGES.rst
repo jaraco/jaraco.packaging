@@ -1,3 +1,9 @@
+4.1
+===
+
+Use pkgutil for namespace package handling. Experimental
+process based on pypa/python-packaging-user-guide#265.
+
 4.0
 ===
 
