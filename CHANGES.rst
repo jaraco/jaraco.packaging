@@ -1,3 +1,12 @@
+5.0
+===
+
+Drop support for Python 2.6.
+
+Re-aligned to use pkg_resources-managed technique for
+the jaraco namespace, all package of which must elect one
+technique or another.
+
 4.1
 ===
 
