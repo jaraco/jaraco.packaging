@@ -20,6 +20,10 @@ from six.moves import urllib
 DistFile = collections.namedtuple('DistFile', 'command pyversion filename')
 
 
+# cause setuptools to monkey patch distutils
+__import__('setuptools')
+
+
 class TarGZAdapter(object):
     """
     Wrap a TarFile object to emulate a ZipFile object
