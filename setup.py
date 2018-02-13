@@ -11,6 +11,11 @@ with io.open('README.rst', encoding='utf-8') as readme:
 
 name = 'jaraco.packaging'
 description = 'tools to supplement packaging Python releases'
+nspkg_technique = 'managed'
+"""
+Does this package use "native" namespace packages or
+pkg_resources "managed" namespace packages?
+"""
 
 params = dict(
 	name=name,
@@ -22,12 +27,24 @@ params = dict(
 	url="https://github.com/jaraco/" + name,
 	packages=setuptools.find_packages(),
 	include_package_data=True,
+	namespace_packages=(
+		name.split('.')[:-1] if nspkg_technique == 'managed'
+		else []
+	),
+	python_requires='>=2.7',
 	install_requires=[
 		'six>=1.4',
 	],
 	extras_require={
-		':python_version=="2.6"': [
-			'subprocess32',
+		'testing': [
+			'pytest>=2.8',
+			'pytest-sugar>=0.9.1',
+			'collective.checkdocs',
+		],
+		'docs': [
+			'sphinx',
+			'jaraco.packaging>=3.2',
+			'rst.linker>=1.9',
 		],
 	},
 	setup_requires=[
@@ -37,7 +54,6 @@ params = dict(
 		"Development Status :: 5 - Production/Stable",
 		"Intended Audience :: Developers",
 		"License :: OSI Approved :: MIT License",
-		"Programming Language :: Python :: 2.6",
 		"Programming Language :: Python :: 2.7",
 		"Programming Language :: Python :: 3",
 		"Framework :: Sphinx :: Extension",

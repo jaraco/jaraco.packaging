@@ -3,19 +3,13 @@
 
 .. image:: https://img.shields.io/pypi/pyversions/jaraco.packaging.svg
 
-.. image:: https://img.shields.io/pypi/dm/jaraco.packaging.svg
-
 .. image:: https://img.shields.io/travis/jaraco/jaraco.packaging/master.svg
-   :target: http://travis-ci.org/jaraco/jaraco.packaging
+   :target: https://travis-ci.org/jaraco/jaraco.packaging
+
+.. image:: https://readthedocs.org/projects/jaracopackaging/badge/?version=latest
+   :target: https://jaracopackaging.readthedocs.io/en/latest/?badge=latest
 
 Tools for packaging.
-
-License
-=======
-
-License is indicated in the project metadata (typically one or more
-of the Trove classifiers). For more details, see `this explanation
-<https://github.com/jaraco/skeleton/issues/1>`_.
 
 dependency_tree
 ===============
