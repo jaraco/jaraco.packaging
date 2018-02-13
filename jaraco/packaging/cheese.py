@@ -39,6 +39,7 @@ def open_archive(stream, filename):
     Open an archive (tarball or zip) and return the object.
     """
     name, ext = os.path.splitext(os.path.basename(filename))
+
     def targz_handler(stream):
         return TarGZAdapter(tarfile.open(fileobj=stream, mode='r:gz'))
     cls = [zipfile.ZipFile, targz_handler]['gz' in ext]
@@ -104,8 +105,9 @@ class RevivedDistribution(distutils.dist.Distribution):
         if not isinstance(desc, six.text_type):
             desc = desc.decode('utf-8')
         lines = io.StringIO(desc)
+
         def trim_eight_spaces(line):
-            if line.startswith(' '*8):
+            if line.startswith(' ' * 8):
                 line = line[8:]
             return line
         lines = itertools.chain(
@@ -117,7 +119,8 @@ class RevivedDistribution(distutils.dist.Distribution):
     def _update_dist_files(self):
         if self.filename.endswith('.egg'):
             type = 'bdist_egg'
-        if self.filename.endswith('.tgz') or self.filename.endswith('.zip') or self.filename.endswith('.tar.gz'):
+        sdist_exts = '.tgz', 'zip', '.tar.gz'
+        if any(self.filename.endswith(ext) for ext in sdist_exts):
             type = 'sdist'
         version_pattern = re.compile(r'py\d\.\d')
         res = version_pattern.search(self.filename)
@@ -131,7 +134,8 @@ class RevivedDistribution(distutils.dist.Distribution):
     def get_version(self):
         return self.package.version
 
-    def has_ext_modules(self): return False
+    def has_ext_modules(self):
+        return False
 
     def cleanup(self):
         if self._is_remote():
@@ -165,8 +169,9 @@ def URL(spec):
     If spec already looks like a URL, just return it. Otherwise, assume
     it is a filename and return it as a file url.
     """
-    if urllib.parse.urlparse(spec).scheme: return spec
-    return 'file:'+spec
+    if urllib.parse.urlparse(spec).scheme:
+        return spec
+    return 'file:' + spec
 
 
 def get_args():

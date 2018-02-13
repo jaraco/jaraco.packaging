@@ -14,7 +14,8 @@ import pkg_resources
 
 text_type = getattr(__builtins__, 'unicode', str)
 
-req_help = ("A setuptools requirement spec (e.g. 'eggmonster' or "
+req_help = (
+    "A setuptools requirement spec (e.g. 'eggmonster' or "
     "'eggmonster==0.1')")
 python_help = "Use a remote environment rather than the local one."
 
@@ -31,9 +32,10 @@ def tree_cmd():
 
 def print_package(requirement, indent):
     r = requirement
-    print('  ' * indent + str(r), '[{0}]'.format(
-        pkg_resources.get_distribution(r))
-        )
+    print(
+        '  ' * indent + str(r),
+        '[{0}]'.format(pkg_resources.get_distribution(r)),
+    )
 
 
 def parse_extras(req):
@@ -49,8 +51,10 @@ def check_dependencies(req, indent=1, history=None):
     environment.
     """
     # keep a history to avoid infinite loops
-    if history is None: history = set()
-    if req in history: return
+    if history is None:
+        history = set()
+    if req in history:
+        return
     history.add(req)
     d = pkg_resources.get_distribution(req)
     extras = parse_extras(req)
@@ -70,7 +74,8 @@ def load_dependencies(req, history=None):
     >>> import json
     >>> doc = json.dumps(deps)
     """
-    if history is None: history = set()
+    if history is None:
+        history = set()
     dist = pkg_resources.get_distribution(req)
     spec = dict(
         requirement=str(req),
@@ -84,7 +89,8 @@ def load_dependencies(req, history=None):
             load_dependencies(dep, history=history)
             for dep in dist.requires(extras=extras)
         ]
-        if depends: spec.update(depends=depends)
+        if depends:
+            spec.update(depends=depends)
     return spec
 
 
