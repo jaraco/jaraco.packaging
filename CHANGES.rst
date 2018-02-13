@@ -1,3 +1,9 @@
+5.1
+===
+
+Added ``jaraco.packaging.make-tree`` utility for taking
+output from pipdeptree and making a tree of it.
+
 5.0
 ===
 

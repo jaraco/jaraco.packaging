@@ -59,3 +59,13 @@ To enable, include 'jaraco.packaging' in your requirements and add
 'jaraco.packaging.sphinx' to your list of extensions in your config file::
 
     extensions=['jaraco.packaging.sphinx']
+
+make-tree
+=========
+
+A utility for taking output from ``pipdeptree --json`` and producing a tree
+rooted at a given package.
+
+Usage::
+
+    pipdeptree --json | python -m jaraco.packaging.make-tree mypkg
