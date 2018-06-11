@@ -1,3 +1,9 @@
+5.1.1
+=====
+
+#2: In Sphinx module, use universal newlines to avoid
+broken results on Windows.
+
 5.1
 ===
 

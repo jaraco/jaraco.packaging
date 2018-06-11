@@ -23,8 +23,12 @@ def load_config_from_setup(app):
     setup_script = os.path.join(root, 'setup.py')
     fields = ['--name', '--version', '--url', '--author']
     dist_info_cmd = [sys.executable, setup_script] + fields
-    output_bytes = subprocess.check_output(dist_info_cmd, cwd=root)
-    outputs = output_bytes.decode('utf-8').strip().split('\n')
+    output = subprocess.check_output(
+        dist_info_cmd,
+        cwd=root,
+        universal_newlines=True,
+    )
+    outputs = output.strip().split('\n')
     project, version, url, author = outputs
     app.config.project = project
     app.config.version = app.config.release = version
