@@ -6,6 +6,9 @@
 .. image:: https://img.shields.io/travis/jaraco/jaraco.packaging/master.svg
    :target: https://travis-ci.org/jaraco/jaraco.packaging
 
+.. .. image:: https://img.shields.io/appveyor/ci/jaraco/skeleton/master.svg
+..    :target: https://ci.appveyor.com/project/jaraco/skeleton/branch/master
+
 .. image:: https://readthedocs.org/projects/jaracopackaging/badge/?version=latest
    :target: https://jaracopackaging.readthedocs.io/en/latest/?badge=latest
 
