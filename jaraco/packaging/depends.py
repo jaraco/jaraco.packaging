@@ -39,7 +39,7 @@ def print_package(requirement, indent):
 
 
 def parse_extras(req):
-    pattern = re.compile('\[(.*)\]')
+    pattern = re.compile(r'\[(.*)\]')
     res = pattern.search(text_type(req))
     return res.group(1).split(',') if res else []
 
