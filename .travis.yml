@@ -1,10 +1,11 @@
-dist: trusty
+dist: xenial
 sudo: false
 language: python
 
 python:
 - 2.7
-- &latest_py3 3.6
+- 3.6
+- &latest_py3 3.7
 
 jobs:
   fast_finish: true
@@ -24,7 +25,6 @@ jobs:
         secure: HDOHQAunXzgN0Lzv9j3dIeW10NPF1QXG6ZSnXaKVtowtnE9JSPsXOETokm/TPd6t3FU4rDAgJN38wNqj+MxkAxTOw1jMEF9XDX11dfnnd74sfGSOJkqs+Z7TCu8jKlpib8eYhBtJMBkKtMUAY+4lKSrn3vamiXKKc6WJ/rXDhsIKnqVYqAZ2kL2AdIHhar+scD/5zDc0UHcHdS8Al1s2+tYOaJ2O6Y2nqmt4ouiHHrEvaZevv2jBrl8bo8FdU5KcHjUM8RBuyYdEpYHw5+uRe5RqNdnoId3Q5aXFc+PykVIEuPTLIJUEWxtYbRTpaalIzNCCFzkxb86A3mRftWKPpEaUqVBRdeNgXqUlxMXfCbw/rkxaZPcYaTlt511vwJfhXVrZGV7C13gxcsNn/gDtMs0ErlRuHxA5+ZBJnFDyPEKRllmGT4aoejj6MvKTOiw0NfV+7oTzrot4Bnr7iJO/i9dVTpPbaR+k4VHckkIKOdB/BjLDvBBrgQqiczONdmN+iw26bxCsvyR/ijbnJnNlbWJJZKZaF3eXYjO2flFBieebdwLSUg0zGlNUcq9REureKKc7Hi90xiOOYcU4Et0g23YEDCacHn54eekrKYZe7KD30AePZxc8y029n5hNZ+gzw8ghBx680Y6dhn1T5eM5NdbfW95gAx3ZgQKT3izgHFU=
       distributions: dists
       skip_cleanup: true
-      skip_upload_docs: true
 
 cache: pip
 
