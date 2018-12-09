@@ -1,3 +1,9 @@
+5.2
+===
+
+Show command now also honors direct attributes on a
+Distribution instance.
+
 5.1.1
 =====
 
