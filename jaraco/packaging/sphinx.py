@@ -12,6 +12,7 @@ if 'check_output' not in dir(subprocess):
 def setup(app):
     app.add_config_value('package_url', '', '')
     app.connect('builder-inited', load_config_from_setup)
+    app.connect('html-page-context', add_package_url)
 
 
 def load_config_from_setup(app):
@@ -34,3 +35,7 @@ def load_config_from_setup(app):
     app.config.version = app.config.release = version
     app.config.package_url = url
     app.config.author = app.config.copyright = author
+
+
+def add_package_url(app, pagename, templatename, context, doctree):
+    context['package_url'] = app.config.package_url

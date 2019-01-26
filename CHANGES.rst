@@ -1,3 +1,8 @@
+6.1
+===
+
+Sphinx plugin now exposes ``package_url`` in HTML templates.
+
 6.0
 ===
 
