@@ -28,6 +28,7 @@ class TarGZAdapter(object):
     """
     Wrap a TarFile object to emulate a ZipFile object
     """
+
     def __init__(self, archive):
         self.archive = archive
 
@@ -46,6 +47,7 @@ def open_archive(stream, filename):
 
     def targz_handler(stream):
         return TarGZAdapter(tarfile.open(fileobj=stream, mode='r:gz'))
+
     cls = [zipfile.ZipFile, targz_handler]['gz' in ext]
     archive = cls(stream)
     return archive
@@ -60,8 +62,7 @@ def get_prefix_dir(archive):
     names = archive.namelist()
     shortest_name = sorted(names, key=len)[0]
     candidate_prefixes = [
-        shortest_name[:length]
-        for length in range(len(shortest_name), -1, -1)
+        shortest_name[:length] for length in range(len(shortest_name), -1, -1)
     ]
     for prefix in candidate_prefixes:
         if all(name.startswith(prefix) for name in names):
@@ -114,9 +115,9 @@ class RevivedDistribution(distutils.dist.Distribution):
             if line.startswith(' ' * 8):
                 line = line[8:]
             return line
+
         lines = itertools.chain(
-            itertools.islice(lines, 1),
-            six.moves.map(trim_eight_spaces, lines),
+            itertools.islice(lines, 1), six.moves.map(trim_eight_spaces, lines)
         )
         self.metadata.long_description = ''.join(lines)
 

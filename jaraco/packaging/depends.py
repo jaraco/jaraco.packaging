@@ -14,9 +14,7 @@ import pkg_resources
 
 text_type = getattr(__builtins__, 'unicode', str)
 
-req_help = (
-    "A setuptools requirement spec (e.g. 'eggmonster' or "
-    "'eggmonster==0.1')")
+req_help = "A setuptools requirement spec (e.g. 'eggmonster' or " "'eggmonster==0.1')"
 python_help = "Use a remote environment rather than the local one."
 
 
@@ -32,10 +30,7 @@ def tree_cmd():
 
 def print_package(requirement, indent):
     r = requirement
-    print(
-        '  ' * indent + str(r),
-        '[{0}]'.format(pkg_resources.get_distribution(r)),
-    )
+    print('  ' * indent + str(r), '[{0}]'.format(pkg_resources.get_distribution(r)))
 
 
 def parse_extras(req):
@@ -77,10 +72,7 @@ def load_dependencies(req, history=None):
     if history is None:
         history = set()
     dist = pkg_resources.get_distribution(req)
-    spec = dict(
-        requirement=str(req),
-        resolved=str(dist),
-    )
+    spec = dict(requirement=str(req), resolved=str(dist))
     if req not in history:
         # traverse into children
         history.add(req)

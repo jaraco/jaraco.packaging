@@ -21,9 +21,10 @@ class Show(setuptools.Command):
     running show
     "['six>=1.4', 'setuptools']"
     """
+
     description = "Report attributes of a distribution's metadata"
     user_options = [
-        (str('attributes='), str('a'), "space or comma-separated attributes"),
+        (str('attributes='), str('a'), "space or comma-separated attributes")
     ]
 
     def finalize_options(self):

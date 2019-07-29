@@ -24,11 +24,7 @@ def load_config_from_setup(app):
     setup_script = os.path.join(root, 'setup.py')
     fields = ['--name', '--version', '--url', '--author']
     dist_info_cmd = [sys.executable, setup_script] + fields
-    output = subprocess.check_output(
-        dist_info_cmd,
-        cwd=root,
-        universal_newlines=True,
-    )
+    output = subprocess.check_output(dist_info_cmd, cwd=root, universal_newlines=True)
     outputs = output.strip().split('\n')
     project, version, url, author = outputs
     app.config.project = project
