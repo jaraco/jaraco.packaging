@@ -1,3 +1,9 @@
+6.2
+===
+
+Sphinx plugin now declares support for parallel reads
+(optimistically).
+
 6.1
 ===
 

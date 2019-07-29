@@ -13,6 +13,7 @@ def setup(app):
     app.add_config_value('package_url', '', '')
     app.connect('builder-inited', load_config_from_setup)
     app.connect('html-page-context', add_package_url)
+    return dict(parallel_read_safe=True)
 
 
 def load_config_from_setup(app):
