@@ -4,6 +4,11 @@ import os
 import sys
 import subprocess
 
+try:
+    import importlib.metadata as imp_meta
+except ImportError:
+    import importlib_metadata as imp_meta
+
 
 if 'check_output' not in dir(subprocess):
     import subprocess32 as subprocess
@@ -13,7 +18,7 @@ def setup(app):
     app.add_config_value('package_url', '', '')
     app.connect('builder-inited', load_config_from_setup)
     app.connect('html-page-context', add_package_url)
-    return dict(parallel_read_safe=True)
+    return dict(version=imp_meta.version('jaraco.packaging'), parallel_read_safe=True)
 
 
 def load_config_from_setup(app):
