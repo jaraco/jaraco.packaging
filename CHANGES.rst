@@ -1,3 +1,10 @@
+7.0
+===
+
+Removed 'cheese' package as it was built for a use-case that is
+no longer needed, depends on deprecated functionality in
+setuptools, and is causing errors in tests (SSL).
+
 6.2
 ===
 
