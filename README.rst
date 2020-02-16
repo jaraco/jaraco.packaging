@@ -1,7 +1,13 @@
 .. image:: https://img.shields.io/pypi/v/jaraco.packaging.svg
-   :target: https://pypi.org/project/jaraco.packaging
+   :target: `PyPI link`_
 
 .. image:: https://img.shields.io/pypi/pyversions/jaraco.packaging.svg
+   :target: `PyPI link`_
+
+.. _PyPI link: https://pypi.org/project/jaraco.packaging
+
+.. image:: https://dev.azure.com/jaraco/jaraco.packaging/_apis/build/status/jaraco.jaraco.packaging?branchName=master
+   :target: https://dev.azure.com/jaraco/jaraco.packaging/_build/latest?definitionId=1&branchName=master
 
 .. image:: https://img.shields.io/travis/jaraco/jaraco.packaging/master.svg
    :target: https://travis-ci.org/jaraco/jaraco.packaging
@@ -10,8 +16,8 @@
    :target: https://github.com/psf/black
    :alt: Code style: Black
 
-.. .. image:: https://img.shields.io/appveyor/ci/jaraco/skeleton/master.svg
-..    :target: https://ci.appveyor.com/project/jaraco/skeleton/branch/master
+.. .. image:: https://img.shields.io/appveyor/ci/jaraco/jaraco-packaging/master.svg
+..    :target: https://ci.appveyor.com/project/jaraco/jaraco-packaging/branch/master
 
 .. image:: https://readthedocs.org/projects/jaracopackaging/badge/?version=latest
    :target: https://jaracopackaging.readthedocs.io/en/latest/?badge=latest
