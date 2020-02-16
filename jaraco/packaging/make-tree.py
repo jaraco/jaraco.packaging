@@ -17,7 +17,7 @@ def by_key(item):
 
 
 def main():
-    root, = sys.argv[1:]
+    (root,) = sys.argv[1:]
     pkgs = Packages.from_defn(json.load(sys.stdin))
     json.dump(pkgs.make_tree(root), sys.stdout)
 
