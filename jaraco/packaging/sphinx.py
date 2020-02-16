@@ -32,7 +32,10 @@ def load_config_from_setup(app):
     dist_info_cmd = [sys.executable, setup_script] + fields
     output = subprocess.check_output(dist_info_cmd, cwd=root, universal_newlines=True)
     outputs = output.strip().split('\n')
-    project, version, url, author = outputs
+    try:
+        project, version, url, author = outputs
+    except ValueError:
+        raise ValueError("Unexpected metadata output", output)
     app.config.project = project
     app.config.version = app.config.release = version
     app.config.package_url = url

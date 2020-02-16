@@ -1,3 +1,9 @@
+v8.1.0
+======
+
+In ``sphinx`` when loading metadata, trap a ValueError to
+include the offending value.
+
 v8.0.0
 ======
 
