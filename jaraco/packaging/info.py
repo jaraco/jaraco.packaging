@@ -1,9 +1,5 @@
-from __future__ import print_function
-
 import subprocess
 import re
-
-import six
 
 import setuptools
 
@@ -19,7 +15,7 @@ class Show(setuptools.Command):
     jaraco.packaging
     >>> print(run(show_cmd + ['-a', 'install_requires']), end='')
     running show
-    "['six>=1.4', 'setuptools']"
+    ['setuptools']
     """
 
     description = "Report attributes of a distribution's metadata"
@@ -28,7 +24,7 @@ class Show(setuptools.Command):
     ]
 
     def finalize_options(self):
-        if isinstance(self.attributes, six.string_types):
+        if isinstance(self.attributes, str):
             self.attributes = re.split('[, ]', self.attributes)
 
     def initialize_options(self):

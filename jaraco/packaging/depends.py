@@ -2,8 +2,6 @@
 This module should only import modules from stdlib and setuptools
 """
 
-from __future__ import print_function, unicode_literals
-
 import os
 import re
 import argparse
