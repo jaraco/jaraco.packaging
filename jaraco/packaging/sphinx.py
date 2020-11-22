@@ -7,11 +7,11 @@ import subprocess
 try:
     import importlib.metadata as imp_meta
 except ImportError:
-    import importlib_metadata as imp_meta
+    import importlib_metadata as imp_meta  # type: ignore
 
 
 if 'check_output' not in dir(subprocess):
-    import subprocess32 as subprocess
+    import subprocess32 as subprocess  # type: ignore
 
 
 def setup(app):
