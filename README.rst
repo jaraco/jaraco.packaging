@@ -6,18 +6,13 @@
 
 .. _PyPI link: https://pypi.org/project/jaraco.packaging
 
-.. image:: https://dev.azure.com/jaraco/jaraco.packaging/_apis/build/status/jaraco.jaraco.packaging?branchName=master
-   :target: https://dev.azure.com/jaraco/jaraco.packaging/_build/latest?definitionId=1&branchName=master
-
-.. image:: https://img.shields.io/travis/jaraco/jaraco.packaging/master.svg
-   :target: https://travis-ci.org/jaraco/jaraco.packaging
+.. image:: https://github.com/jaraco/jaraco.packaging/workflows/Automated%20Tests/badge.svg
+   :target: https://github.com/jaraco/jaraco.packaging/actions?query=workflow%3A%22Automated+Tests%22
+   :alt: Automated Tests
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
    :alt: Code style: Black
-
-.. .. image:: https://img.shields.io/appveyor/ci/jaraco/jaraco-packaging/master.svg
-..    :target: https://ci.appveyor.com/project/jaraco/jaraco-packaging/branch/master
 
 .. image:: https://readthedocs.org/projects/jaracopackaging/badge/?version=latest
    :target: https://jaracopackaging.readthedocs.io/en/latest/?badge=latest
