@@ -1,3 +1,8 @@
+v8.2.0
+======
+
+Inject rst_epilog to include ``|project|`` substitution.
+
 v8.1.1
 ======
 

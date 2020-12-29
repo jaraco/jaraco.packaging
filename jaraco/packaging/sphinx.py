@@ -15,6 +15,7 @@ if 'check_output' not in dir(subprocess):
 def setup(app):
     app.add_config_value('package_url', '', '')
     app.connect('builder-inited', load_config_from_setup)
+    app.connect('builder-inited', configure_substitutions)
     app.connect('html-page-context', add_package_url)
     return dict(version=imp_meta.version('jaraco.packaging'), parallel_read_safe=True)
 
@@ -38,6 +39,11 @@ def load_config_from_setup(app):
     app.config.version = app.config.release = version
     app.config.package_url = url
     app.config.author = app.config.copyright = author
+
+
+def configure_substitutions(app):
+    epilogs = app.config.rst_epilog, f'.. |project| replace:: {app.config.project}'
+    app.config.rst_epilog = '\n'.join(filter(None, epilogs))
 
 
 def add_package_url(app, pagename, templatename, context, doctree):
