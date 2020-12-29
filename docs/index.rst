@@ -12,11 +12,6 @@ Welcome to jaraco.packaging documentation!
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: jaraco.packaging.cheese
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 .. automodule:: jaraco.packaging.depends
     :members:
     :undoc-members:
