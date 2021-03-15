@@ -1,3 +1,8 @@
+v8.2.1
+======
+
+Rely on PEP 420 for namespace package.
+
 v8.2.0
 ======
 
