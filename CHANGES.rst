@@ -1,8 +1,10 @@
-v8.3.0
+v9.0.0
 ======
 
 Use pep517.meta to load package metadata. Adds support
 for packages without setup.py.
+
+Removed info module (and setuptools show command).
 
 v8.2.1
 ======
