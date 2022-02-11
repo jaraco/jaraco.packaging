@@ -6,6 +6,8 @@ for packages without setup.py.
 
 Removed info module (and setuptools show command).
 
+Removed depends module. Use other packaging tools instead.
+
 v8.2.1
 ======
 

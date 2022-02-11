@@ -12,11 +12,6 @@ Welcome to |project| documentation!
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: jaraco.packaging.depends
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 .. automodule:: jaraco.packaging.sphinx
     :members:
     :undoc-members:

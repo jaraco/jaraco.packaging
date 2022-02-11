@@ -22,12 +22,6 @@
 
 Tools for packaging.
 
-dependency_tree
-===============
-
-A distutils command for reporting the dependency tree as resolved
-by setuptools. Use after installing a package.
-
 sphinx
 ======
 

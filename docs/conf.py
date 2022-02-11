@@ -28,10 +28,6 @@ link_files = {
 # Be strict about any broken references:
 nitpicky = True
 
-nitpick_ignore = [
-    ('py:class', 'setuptools.Command'),  # undocumented
-]
-
 # Include Python intersphinx mapping to prevent failures
 # jaraco/skeleton#51
 extensions += ['sphinx.ext.intersphinx']
