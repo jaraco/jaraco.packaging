@@ -1,6 +1,6 @@
 import os
-import sys
 import subprocess
+import pep517.meta
 
 try:
     import importlib.metadata as imp_meta
@@ -26,19 +26,11 @@ def load_config_from_setup(app):
     """
     # for now, assume project root is one level up
     root = os.path.join(app.confdir, '..')
-    setup_script = os.path.join(root, 'setup.py')
-    fields = ['--name', '--version', '--url', '--author']
-    dist_info_cmd = [sys.executable, setup_script] + fields
-    output = subprocess.check_output(dist_info_cmd, cwd=root, universal_newlines=True)
-    outputs = output.strip().split('\n')
-    try:
-        project, version, url, author = outputs
-    except ValueError:
-        raise ValueError("Unexpected metadata output", output)
-    app.config.project = project
-    app.config.version = app.config.release = version
-    app.config.package_url = url
-    app.config.author = app.config.copyright = author
+    meta = pep517.meta.load(root).metadata
+    app.config.project = meta['Name']
+    app.config.version = app.config.release = meta['Version']
+    app.config.package_url = meta['Home-page']
+    app.config.author = app.config.copyright = meta['Author']
 
 
 def configure_substitutions(app):

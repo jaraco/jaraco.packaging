@@ -1,3 +1,9 @@
+v8.3.0
+======
+
+Use pep517.meta to load package metadata. Adds support
+for packages without setup.py.
+
 v8.2.1
 ======
 
