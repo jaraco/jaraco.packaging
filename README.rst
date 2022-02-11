@@ -17,6 +17,9 @@
 .. image:: https://readthedocs.org/projects/jaracopackaging/badge/?version=latest
    :target: https://jaracopackaging.readthedocs.io/en/latest/?badge=latest
 
+.. image:: https://img.shields.io/badge/skeleton-2022-informational
+   :target: https://blog.jaraco.com/skeleton
+
 Tools for packaging.
 
 dependency_tree
