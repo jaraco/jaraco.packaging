@@ -1,11 +1,12 @@
 import os
 import subprocess
+
 import pep517.meta
 
 try:
-    import importlib.metadata as imp_meta
+    import importlib.metadata as metadata
 except ImportError:
-    import importlib_metadata as imp_meta  # type: ignore
+    import importlib_metadata as metadata  # type: ignore
 
 
 if 'check_output' not in dir(subprocess):
@@ -17,7 +18,7 @@ def setup(app):
     app.connect('builder-inited', load_config_from_setup)
     app.connect('builder-inited', configure_substitutions)
     app.connect('html-page-context', add_package_url)
-    return dict(version=imp_meta.version('jaraco.packaging'), parallel_read_safe=True)
+    return dict(version=metadata.version('jaraco.packaging'), parallel_read_safe=True)
 
 
 def load_config_from_setup(app):
