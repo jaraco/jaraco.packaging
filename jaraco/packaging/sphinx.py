@@ -27,7 +27,7 @@ def load_config_from_setup(app):
     """
     # for now, assume project root is one level up
     root = os.path.join(app.confdir, '..')
-    meta = load_metadata(root)
+    meta = load_metadata(root, isolated=False)
     app.config.project = meta['Name']
     app.config.version = app.config.release = meta['Version']
     app.config.package_url = meta['Home-page']
