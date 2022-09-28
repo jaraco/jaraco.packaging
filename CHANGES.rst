@@ -1,3 +1,8 @@
+v9.1.0
+======
+
+Prefer ``build`` to ``pep517`` for loading package metadata.
+
 v9.0.0
 ======
 
