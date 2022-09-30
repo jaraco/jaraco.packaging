@@ -1,3 +1,9 @@
+v9.1.1
+======
+
+Change requirement to ``build[virtualenv]`` as workaround for
+`pypa/build#266 <https://github.com/pypa/build/issue/266>`_.
+
 v9.1.0
 ======
 
