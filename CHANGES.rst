@@ -1,3 +1,8 @@
+v9.1.2
+======
+
+#6: Added minimal test to ``sphinx.packaging``.
+
 v9.1.1
 ======
 

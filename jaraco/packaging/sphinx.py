@@ -1,3 +1,11 @@
+"""
+This module is a Sphinx plugin. Add ``jaraco.packaging.sphinx``
+to conf.py, and the setup hook does the rest.
+
+>>> 'setup' in globals()
+True
+"""
+
 import os
 import subprocess
 
