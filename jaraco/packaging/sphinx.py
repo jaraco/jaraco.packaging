@@ -8,8 +8,10 @@ True
 
 import os
 import subprocess
+from email import message_from_string as load_metadata_from_wheel
+from zipfile import ZipFile
 
-from build.util import project_wheel_metadata as load_metadata
+from build.util import project_wheel_metadata as load_metadata_from_source
 
 try:
     import importlib.metadata as metadata
@@ -33,9 +35,23 @@ def load_config_from_setup(app):
     """
     Replace values in app.config from package metadata
     """
-    # for now, assume project root is one level up
-    root = os.path.join(app.confdir, '..')
-    meta = load_metadata(root)
+    wheel_for_metadata = os.environ.get("JARACO_PACKAGING_SPHINX_WHEEL", None)
+    if wheel_for_metadata is not None:
+        with ZipFile(wheel_for_metadata) as wheel:
+            meta = None
+            for name in wheel.namelist():
+                if '.dist-info' in name and name.endswith("METADATA"):
+                    meta = load_metadata_from_wheel(wheel.read(name).decode())
+                    break
+            if meta is None:
+                raise RuntimeError(
+                    "The environment variable JARACO_PACKAGING_SPHINX_WHEEL "
+                    "points to a file not containing metadata."
+                )
+    else:
+        # for now, assume project root is one level up
+        root = os.path.join(app.confdir, '..')
+        meta = load_metadata_from_source(root)
     app.config.project = meta['Name']
     app.config.version = app.config.release = meta['Version']
     app.config.package_url = meta['Home-page']

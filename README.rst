@@ -38,6 +38,11 @@ To enable, include 'jaraco.packaging' in your requirements and add
 
     extensions=['jaraco.packaging.sphinx']
 
+The extension by default builds the project in an isolated environment in
+order to extract the metadata. If you need to build the documentation offline,
+you can provide an already built wheel by setting the environment variable
+``JARACO_PACKAGING_SPHINX_WHEEL`` to the path of the existing wheel.
+
 make-tree
 =========
 
