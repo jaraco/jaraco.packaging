@@ -31,9 +31,11 @@ def setup(app):
     return dict(version=metadata.version('jaraco.packaging'), parallel_read_safe=True)
 
 
-def load_config_from_setup(app):
+def _load_metadata_from_wheel():
     """
-    Replace values in app.config from package metadata
+    If indicated by an environment variable, expect the metadat
+    to be present in a wheel and load it from there, avoiding
+    the build process. Ref jaraco/jaraco.packaging#7.
     """
     wheel_for_metadata = os.environ.get("JARACO_PACKAGING_SPHINX_WHEEL", None)
     if wheel_for_metadata is not None:
@@ -41,17 +43,21 @@ def load_config_from_setup(app):
             meta = None
             for name in wheel.namelist():
                 if '.dist-info' in name and name.endswith("METADATA"):
-                    meta = load_metadata_from_wheel(wheel.read(name).decode())
-                    break
+                    return load_metadata_from_wheel(wheel.read(name).decode())
             if meta is None:
                 raise RuntimeError(
                     "The environment variable JARACO_PACKAGING_SPHINX_WHEEL "
                     "points to a file not containing metadata."
                 )
-    else:
-        # for now, assume project root is one level up
-        root = os.path.join(app.confdir, '..')
-        meta = load_metadata_from_source(root)
+
+
+def load_config_from_setup(app):
+    """
+    Replace values in app.config from package metadata
+    """
+    # for now, assume project root is one level up
+    root = os.path.join(app.confdir, '..')
+    meta = _load_metadata_from_wheel() or load_metadata_from_source(root)
     app.config.project = meta['Name']
     app.config.version = app.config.release = meta['Version']
     app.config.package_url = meta['Home-page']
