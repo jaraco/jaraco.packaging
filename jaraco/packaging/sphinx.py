@@ -36,6 +36,12 @@ def _load_metadata_from_wheel():
     If indicated by an environment variable, expect the metadata
     to be present in a wheel and load it from there, avoiding
     the build process. Ref jaraco/jaraco.packaging#7.
+
+    >>> _load_metadata_from_wheel()
+    >>> getfixture('static_wheel')
+    >>> meta = _load_metadata_from_wheel()
+    >>> meta['Name']
+    'sampleproject'
     """
     wheel = os.environ['JARACO_PACKAGING_SPHINX_WHEEL']
     (dist,) = metadata.distributions(path=[wheel])
