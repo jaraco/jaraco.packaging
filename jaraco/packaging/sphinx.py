@@ -12,6 +12,7 @@ from email import message_from_string as load_metadata_from_wheel
 from zipfile import ZipFile
 
 from build.util import project_wheel_metadata as load_metadata_from_source
+from jaraco.context import suppress
 
 try:
     import importlib.metadata as metadata
@@ -31,24 +32,23 @@ def setup(app):
     return dict(version=metadata.version('jaraco.packaging'), parallel_read_safe=True)
 
 
+@suppress(KeyError)
 def _load_metadata_from_wheel():
     """
     If indicated by an environment variable, expect the metadat
     to be present in a wheel and load it from there, avoiding
     the build process. Ref jaraco/jaraco.packaging#7.
     """
-    wheel_for_metadata = os.environ.get("JARACO_PACKAGING_SPHINX_WHEEL", None)
-    if wheel_for_metadata is not None:
-        with ZipFile(wheel_for_metadata) as wheel:
-            meta = None
-            for name in wheel.namelist():
-                if '.dist-info' in name and name.endswith("METADATA"):
-                    return load_metadata_from_wheel(wheel.read(name).decode())
-            if meta is None:
-                raise RuntimeError(
-                    "The environment variable JARACO_PACKAGING_SPHINX_WHEEL "
-                    "points to a file not containing metadata."
-                )
+    with ZipFile(os.environ['JARACO_PACKAGING_SPHINX_WHEEL']) as wheel:
+        meta = None
+        for name in wheel.namelist():
+            if '.dist-info' in name and name.endswith("METADATA"):
+                return load_metadata_from_wheel(wheel.read(name).decode())
+        if meta is None:
+            raise RuntimeError(
+                "The environment variable JARACO_PACKAGING_SPHINX_WHEEL "
+                "points to a file not containing metadata."
+            )
 
 
 def load_config_from_setup(app):
