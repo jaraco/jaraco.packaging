@@ -9,7 +9,7 @@ True
 import os
 import subprocess
 
-from build.util import project_wheel_metadata as load_metadata_from_source
+from build.util import project_wheel_metadata as load_metadata
 from jaraco.context import suppress
 
 try:
@@ -48,7 +48,7 @@ def load_config_from_setup(app):
     """
     # for now, assume project root is one level up
     root = os.path.join(app.confdir, '..')
-    meta = _load_metadata_from_wheel() or load_metadata_from_source(root)
+    meta = _load_metadata_from_wheel() or load_metadata(root)
     app.config.project = meta['Name']
     app.config.version = app.config.release = meta['Version']
     app.config.package_url = meta['Home-page']
