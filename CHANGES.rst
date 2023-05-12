@@ -1,3 +1,9 @@
+v9.2.0
+======
+
+#7, #10, #11: Added environment variable to bypass
+building metadata for offline builds.
+
 v9.1.2
 ======
 
