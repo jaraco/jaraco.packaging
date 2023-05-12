@@ -33,14 +33,15 @@ distutils):
  - release (same as version)
  - package_url (from url)
 
-To enable, include 'jaraco.packaging' in your requirements and add
-'jaraco.packaging.sphinx' to your list of extensions in your config file::
+To enable, include 'jaraco.packaging' in the requirements and add
+'jaraco.packaging.sphinx' to the list of extensions in a Sphinx config
+file::
 
     extensions=['jaraco.packaging.sphinx']
 
 The extension by default builds the project in an isolated environment in
-order to extract the metadata. If you need to build the documentation offline,
-you can provide an already built wheel by setting the environment variable
+order to extract the metadata. To build the documentation offline,
+provide an already built wheel by setting the environment variable
 ``JARACO_PACKAGING_SPHINX_WHEEL`` to the path of the existing wheel.
 
 make-tree
