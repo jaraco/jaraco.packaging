@@ -7,7 +7,6 @@ True
 """
 
 import os
-import subprocess
 
 from build.util import project_wheel_metadata as load_metadata
 from jaraco.context import suppress
@@ -16,10 +15,6 @@ try:
     import importlib.metadata as metadata
 except ImportError:
     import importlib_metadata as metadata  # type: ignore
-
-
-if 'check_output' not in dir(subprocess):
-    import subprocess32 as subprocess  # type: ignore
 
 
 def setup(app):
