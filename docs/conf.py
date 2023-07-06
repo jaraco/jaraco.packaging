@@ -36,6 +36,7 @@ nitpicky = True
 extensions += ['sphinx.ext.intersphinx']
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
+    'sphinx': ('https://www.sphinx-doc.org/en/stable/', None),
 }
 
 # Preserve authored syntax for defaults
