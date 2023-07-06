@@ -1,3 +1,13 @@
+v9.3.0
+======
+
+Features
+--------
+
+- Add sidebar-links directive.
+- Require Python 3.8 or later.
+
+
 v9.2.0
 ======
 
