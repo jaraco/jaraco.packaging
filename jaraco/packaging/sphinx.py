@@ -7,6 +7,7 @@ True
 """
 
 import os
+from importlib import metadata
 
 from build.util import project_wheel_metadata as load_metadata
 from jaraco.context import suppress
@@ -14,11 +15,6 @@ import sphinx.util.docutils
 from docutils.parsers.rst import directives
 import docutils.statemachine
 import domdf_python_tools.stringlist
-
-try:
-    import importlib.metadata as metadata
-except ImportError:
-    import importlib_metadata as metadata  # type: ignore
 
 
 def setup(app):
