@@ -7,6 +7,7 @@ True
 """
 
 import os
+import warnings
 from importlib import metadata
 
 from build.util import project_wheel_metadata as load_metadata
@@ -95,6 +96,10 @@ def _load_metadata_from_wheel():
     'sampleproject'
     """
     wheel = os.environ['JARACO_PACKAGING_SPHINX_WHEEL']
+    warnings.warn(
+        "JARACO_PACKAGING_SPHINX_WHEEL is deprecated; fix pypa/build#556 instead",
+        DeprecationWarning,
+    )
     (dist,) = metadata.distributions(path=[wheel])
     return dist.metadata
 
