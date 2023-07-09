@@ -1,3 +1,12 @@
+v9.4.0
+======
+
+Features
+--------
+
+- Deprecated use of environment variable for isolated builds. The workaround is in the wrong place and should be dealt with upstream. (#11)
+
+
 v9.3.0
 ======
 
