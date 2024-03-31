@@ -10,12 +10,13 @@ import os
 import warnings
 from importlib import metadata
 
-from build.util import project_wheel_metadata as load_metadata
-from jaraco.context import suppress
-import sphinx.util.docutils
-from docutils.parsers.rst import directives
 import docutils.statemachine
 import domdf_python_tools.stringlist
+import sphinx.util.docutils
+from docutils.parsers.rst import directives
+
+from build.util import project_wheel_metadata as load_metadata
+from jaraco.context import suppress
 
 
 def setup(app):

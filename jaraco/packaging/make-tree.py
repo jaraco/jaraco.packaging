@@ -3,9 +3,9 @@ Take json output from pipdeptree --json and make it into
 a tree rooted at the indicated package.
 """
 
-import sys
-import json
 import itertools
+import json
+import sys
 
 
 def by_package_key(item):
