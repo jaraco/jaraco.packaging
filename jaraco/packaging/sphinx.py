@@ -49,12 +49,10 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
         if self.env.docname != self.env.config.master_doc:
             return []
 
-        body = domdf_python_tools.stringlist.StringList(
-            [
-                ".. toctree::",
-                "    :hidden:",
-            ]
-        )
+        body = domdf_python_tools.stringlist.StringList([
+            ".. toctree::",
+            "    :hidden:",
+        ])
 
         with body.with_indent("    ", 1):
             body.append(f":caption: {self.options.get('caption', 'Links')}")
