@@ -9,6 +9,7 @@ True
 import os
 import warnings
 from importlib import metadata
+from typing import ClassVar
 
 import docutils.statemachine
 import domdf_python_tools.stringlist
@@ -34,7 +35,7 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
     and PyPI repo.
     """
 
-    has_content: bool = True
+    has_content: ClassVar[bool] = True
 
     option_spec = {
         "pypi": directives.flag,
