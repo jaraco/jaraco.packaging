@@ -16,8 +16,9 @@ import domdf_python_tools.stringlist
 import sphinx.util.docutils
 from docutils.parsers.rst import directives
 
-from build.util import project_wheel_metadata as load_metadata
 from jaraco.context import suppress
+
+from .metadata import load
 
 
 def setup(app):
@@ -97,7 +98,8 @@ def _load_metadata_from_wheel():
     """
     wheel = os.environ['JARACO_PACKAGING_SPHINX_WHEEL']
     warnings.warn(
-        "JARACO_PACKAGING_SPHINX_WHEEL is deprecated; fix pypa/build#556 instead",
+        "JARACO_PACKAGING_SPHINX_WHEEL is deprecated; "
+        "use BUILD_ENVIRONMENT=current instead",
         DeprecationWarning,
     )
     (dist,) = metadata.distributions(path=[wheel])
@@ -110,7 +112,7 @@ def load_config_from_setup(app):
     """
     # for now, assume project root is one level up
     root = os.path.join(app.confdir, '..')
-    meta = _load_metadata_from_wheel() or load_metadata(root)
+    meta = _load_metadata_from_wheel() or load(root)
     app.config.project = meta['Name']
     app.config.version = app.config.release = meta['Version']
     app.config.package_url = meta['Home-page']
