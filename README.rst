@@ -19,6 +19,7 @@
 
 Tools for packaging.
 
+
 sphinx
 ======
 
@@ -40,9 +41,14 @@ file::
     extensions=['jaraco.packaging.sphinx']
 
 The extension by default builds the project in an isolated environment in
-order to extract the metadata. To build the documentation offline,
+order to extract the metadata. For offline builds, set
+``BUILD_ENVIRONMENT=current`` and ensure the build dependencies are
+met in the current environment.
+
+Deprecated: To build the documentation offline,
 provide an already built wheel by setting the environment variable
-``JARACO_PACKAGING_SPHINX_WHEEL`` to the path of the existing wheel.
+``JARACO_PACKAGING_SPHINX_WHEEL`` to the path of an existing wheel.
+
 
 make-tree
 =========
@@ -53,3 +59,12 @@ rooted at a given package.
 Usage::
 
     pipdeptree --json | python -m jaraco.packaging.make-tree mypkg
+
+
+metadata
+=========
+
+A wrapper around ``build.util.project_wheel_metadata`` to enable dowstream
+packagers to indicate that they need an isolated build. Set the environment
+variable ``BUILD_ENVIRONMENT=current`` to bypass build isolation and use the
+current isolation for loading metadata from a project.
