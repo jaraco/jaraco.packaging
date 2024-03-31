@@ -1,3 +1,12 @@
+v9.5.0
+======
+
+Features
+--------
+
+- Add ``metadata.load`` for loading metadata from a source dir with support for a BUILD_ENVIRONMENT setting. Set BUILD_ENVIRONMENT=current to bypass isolation when loading metadata. Ref pypa/build#556. (#556)
+
+
 v9.4.0
 ======
 
