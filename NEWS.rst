@@ -1,3 +1,12 @@
+v9.6.0
+======
+
+Features
+--------
+
+- Add support for other metadata fields since pyproject.toml shuffles things around. (#17)
+
+
 v9.5.0
 ======
 

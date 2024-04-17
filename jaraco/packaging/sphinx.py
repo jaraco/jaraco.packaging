@@ -7,6 +7,7 @@ True
 """
 
 import os
+import re
 import warnings
 from importlib import metadata
 from typing import ClassVar
@@ -115,8 +116,27 @@ def load_config_from_setup(app, config):
     meta = _load_metadata_from_wheel() or load(root)
     config.project = meta['Name']
     config.version = config.release = meta['Version']
-    config.package_url = meta['Home-page']
-    config.author = config.copyright = meta['Author']
+    config.package_url = hunt_down_url(meta)
+    config.author = config.copyright = extract_author(meta)
+
+
+def hunt_down_url(meta):
+    """
+    Given project metadata, figure out what the package URL is.
+    """
+    return meta['Home-page'] or get_best(meta.get_all('Project-URL'))
+
+
+def get_best(project_urls):
+    lookup = dict(url.split(', ') for url in project_urls)
+    return lookup.get('Source') or lookup.get('Homepage')
+
+
+def extract_author(meta):
+    """
+    Given project metadata, figure out who the author is.
+    """
+    return meta['Author'] or re.search(r'"(.+)"', meta['Author-email']).group(1)
 
 
 def configure_substitutions(app, config):
