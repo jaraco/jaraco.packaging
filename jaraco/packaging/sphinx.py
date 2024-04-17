@@ -135,8 +135,33 @@ def get_best(project_urls):
 def extract_author(meta):
     """
     Given project metadata, figure out who the author is.
+
+    The metadata is so irregular, just make some inferences and refine.
+
+    This form comes from a setup.cfg file or setup.py.
+
+    >>> meta = {'Author': 'Jason R. Coombs'}
+    >>> extract_author(meta)
+    'Jason R. Coombs'
+    >>> meta = {'Author': 'Foo Bar, Bing Baz'}
+    >>> extract_author(meta)
+    'Foo Bar, Bing Baz'
+
+    This form comes from pyproject.toml converted from the above config.
+
+    >>> meta = {'Author-email': '"Jason R. Coombs" <jaraco@contoso.com>', 'Author': None}
+    >>> extract_author(meta)
+    'Jason R. Coombs'
+    >>> meta = {'Author-email': 'Foo Bar <foo@bar.name>, Bing Baz <bing@baz.name>', 'Author': None}
+    >>> extract_author(meta)
+    'Foo Bar, Bing Baz'
     """
-    return meta['Author'] or re.search(r'"(.+)"', meta['Author-email']).group(1)
+    return meta['Author'] or ', '.join(
+        match.group('name')
+        for match in re.finditer(
+            r'["]?(?P<name>\w[\w\s.]*?)["]?\s+<\w+@[\w.]+>', meta['Author-email']
+        )
+    )
 
 
 def configure_substitutions(app, config):

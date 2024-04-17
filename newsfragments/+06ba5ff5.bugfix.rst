@@ -1,0 +1,1 @@
+In extract_author, expand the logic to support multiple authors in pyproject.toml form.
