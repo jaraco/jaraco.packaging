@@ -1,3 +1,12 @@
+v9.7.1
+======
+
+Bugfixes
+--------
+
+- In extract_author, expand the logic to support multiple authors in pyproject.toml form.
+
+
 v9.7.0
 ======
 
