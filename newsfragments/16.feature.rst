@@ -1,0 +1,1 @@
+Configure Sphinx earlier in 'config-inited', allowing other etxensions to rely on the produced values.
