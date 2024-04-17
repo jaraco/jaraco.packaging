@@ -24,8 +24,8 @@ from .metadata import load
 
 def setup(app):
     app.add_config_value('package_url', '', '')
-    app.connect('builder-inited', load_config_from_setup)
-    app.connect('builder-inited', configure_substitutions)
+    app.connect('config-inited', load_config_from_setup)
+    app.connect('config-inited', configure_substitutions)
     app.connect('html-page-context', add_package_url)
     app.add_directive("sidebar-links", SidebarLinksDirective)
     return dict(version=metadata.version('jaraco.packaging'), parallel_read_safe=True)
@@ -107,17 +107,17 @@ def _load_metadata_from_wheel():
     return dist.metadata
 
 
-def load_config_from_setup(app):
+def load_config_from_setup(app, config):
     """
     Replace values in app.config from package metadata
     """
     # for now, assume project root is one level up
     root = os.path.join(app.confdir, '..')
     meta = _load_metadata_from_wheel() or load(root)
-    app.config.project = meta['Name']
-    app.config.version = app.config.release = meta['Version']
-    app.config.package_url = hunt_down_url(meta)
-    app.config.author = app.config.copyright = extract_author(meta)
+    config.project = meta['Name']
+    config.version = config.release = meta['Version']
+    config.package_url = hunt_down_url(meta)
+    config.author = config.copyright = extract_author(meta)
 
 
 def hunt_down_url(meta):
@@ -139,9 +139,9 @@ def extract_author(meta):
     return meta['Author'] or re.search(r'"(.+)"', meta['Author-email']).group(1)
 
 
-def configure_substitutions(app):
-    epilogs = app.config.rst_epilog, f'.. |project| replace:: {app.config.project}'
-    app.config.rst_epilog = '\n'.join(filter(None, epilogs))
+def configure_substitutions(app, config):
+    epilogs = config.rst_epilog, f'.. |project| replace:: {config.project}'
+    config.rst_epilog = '\n'.join(filter(None, epilogs))
 
 
 def add_package_url(app, pagename, templatename, context, doctree):
