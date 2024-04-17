@@ -1,3 +1,12 @@
+v9.7.0
+======
+
+Features
+--------
+
+- Configure Sphinx earlier in 'config-inited', allowing other etxensions to rely on the produced values. (#16)
+
+
 v9.6.0
 ======
 
