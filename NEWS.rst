@@ -1,3 +1,12 @@
+v10.0.0
+=======
+
+Deprecations and Removals
+-------------------------
+
+- Moved metadata helpers to metadata module.
+
+
 v9.7.1
 ======
 
