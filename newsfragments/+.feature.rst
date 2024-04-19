@@ -1,1 +1,0 @@
-Add metadata.extract_email helper. Ref jaraco/jaraco.media#2.

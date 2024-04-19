@@ -1,3 +1,12 @@
+v10.1.0
+=======
+
+Features
+--------
+
+- Add metadata.extract_email helper. Ref jaraco/jaraco.media#2.
+
+
 v10.0.0
 =======
 
