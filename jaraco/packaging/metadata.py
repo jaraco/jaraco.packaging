@@ -27,6 +27,10 @@ def get_best(project_urls):
     return lookup.get('Source') or lookup.get('Homepage')
 
 
+combo_re = r'["]?(?P<name>\w[\w\s.]*?)["]?\s+<(?P<email>\w+@[\w.]+)>'
+"""The pattern for matching name and email from *-email fields."""
+
+
 def extract_author(meta):
     """
     Given project metadata, figure out who the author is.
@@ -52,8 +56,36 @@ def extract_author(meta):
     'Foo Bar, Bing Baz'
     """
     return meta['Author'] or ', '.join(
-        match.group('name')
-        for match in re.finditer(
-            r'["]?(?P<name>\w[\w\s.]*?)["]?\s+<\w+@[\w.]+>', meta['Author-email']
-        )
+        match.group('name') for match in re.finditer(combo_re, meta['Author-email'])
+    )
+
+
+def extract_email(meta):
+    """
+    Given project metadata, figure out the author's email.
+
+    The metadata is so irregular, just make some inferences and refine.
+
+    This form comes from a setup.cfg file or setup.py.
+
+    >>> meta = {'Author-email': 'jaraco@contoso.com'}
+    >>> extract_email(meta)
+    'jaraco@contoso.com'
+    >>> meta = {'Author-email': 'foo@bar.name, bing@baz.name'}
+    >>> extract_email(meta)
+    'foo@bar.name, bing@baz.name'
+
+    This form comes from pyproject.toml converted from the above config.
+
+    >>> meta = {'Author-email': '"Jason R. Coombs" <jaraco@contoso.com>', 'Author': None}
+    >>> extract_email(meta)
+    'jaraco@contoso.com'
+    >>> meta = {'Author-email': 'Foo Bar <foo@bar.name>, Bing Baz <bing@baz.name>', 'Author': None}
+    >>> extract_email(meta)
+    'foo@bar.name, bing@baz.name'
+    """
+    if '<' not in meta['Author-email']:
+        return meta['Author-email']
+    return ', '.join(
+        match.group('email') for match in re.finditer(combo_re, meta['Author-email'])
     )
