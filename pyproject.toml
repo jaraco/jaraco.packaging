@@ -28,7 +28,7 @@ dependencies = [
 dynamic = ["version"]
 
 [project.urls]
-Homepage = "https://github.com/jaraco/jaraco.packaging"
+Source = "https://github.com/jaraco/jaraco.packaging"
 
 [project.optional-dependencies]
 test = [
