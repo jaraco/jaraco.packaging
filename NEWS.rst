@@ -1,3 +1,12 @@
+v10.2.1
+=======
+
+Bugfixes
+--------
+
+- Fixed issue in rendering non-unique keys in print-metadata.
+
+
 v10.2.0
 =======
 
