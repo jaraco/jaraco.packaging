@@ -18,6 +18,9 @@ def load(
 def hunt_down_url(meta):
     """
     Given project metadata, figure out what the package URL is.
+
+    >>> hunt_down_url(load('.'))
+    'https://github.com/jaraco/jaraco.packaging'
     """
     return meta['Home-page'] or get_best(meta.get_all('Project-URL'))
 
