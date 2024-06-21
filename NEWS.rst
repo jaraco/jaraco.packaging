@@ -1,3 +1,12 @@
+v10.2.2
+=======
+
+Bugfixes
+--------
+
+- Fixed DeprecationWarning in metadata.hunt_down_url.
+
+
 v10.2.1
 =======
 
