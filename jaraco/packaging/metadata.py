@@ -22,7 +22,7 @@ def hunt_down_url(meta):
     >>> hunt_down_url(load('.'))
     'https://github.com/jaraco/jaraco.packaging'
     """
-    return meta['Home-page'] or get_best(meta.get_all('Project-URL'))
+    return meta.get('Home-page') or get_best(meta.get_all('Project-URL'))
 
 
 def get_best(project_urls):
