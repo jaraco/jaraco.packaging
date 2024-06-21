@@ -1,3 +1,12 @@
+v10.2.0
+=======
+
+Features
+--------
+
+- Add script for printing metadata.
+
+
 v10.1.0
 =======
 
