@@ -51,14 +51,14 @@ def extract_author(meta):
 
     This form comes from pyproject.toml converted from the above config.
 
-    >>> meta = {'Author-email': '"Jason R. Coombs" <jaraco@contoso.com>', 'Author': None}
+    >>> meta = {'Author-email': '"Jason R. Coombs" <jaraco@contoso.com>'}
     >>> extract_author(meta)
     'Jason R. Coombs'
-    >>> meta = {'Author-email': 'Foo Bar <foo@bar.name>, Bing Baz <bing@baz.name>', 'Author': None}
+    >>> meta = {'Author-email': 'Foo Bar <foo@bar.name>, Bing Baz <bing@baz.name>'}
     >>> extract_author(meta)
     'Foo Bar, Bing Baz'
     """
-    return meta['Author'] or ', '.join(
+    return meta.get('Author') or ', '.join(
         match.group('name') for match in re.finditer(combo_re, meta['Author-email'])
     )
 
