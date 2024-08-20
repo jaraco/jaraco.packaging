@@ -1,3 +1,12 @@
+v10.2.3
+=======
+
+Bugfixes
+--------
+
+- Adapt to latest versions of importlib.metadata that don't allow for implicit None values.
+
+
 v10.2.2
 =======
 
