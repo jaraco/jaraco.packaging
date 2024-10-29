@@ -17,7 +17,7 @@ classifiers = [
 	"Programming Language :: Python :: 3 :: Only",
 	"Framework :: Sphinx :: Extension",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
 	# virtualenv extra due to pypa/build#266
 	"build[virtualenv]",
