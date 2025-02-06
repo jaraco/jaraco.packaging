@@ -73,11 +73,9 @@ type = [
 	"pytest-mypy",
 
 	# local
+	# PackageMetadata Protocol doesn't have `get` method until Python 3.12
+	# But this is a type-checking only issue.
+	"importlib_metadata",
 ]
 
-
 [tool.setuptools_scm]
-
-
-[tool.pytest-enabler.mypy]
-# Disabled due to jaraco/skeleton#143
