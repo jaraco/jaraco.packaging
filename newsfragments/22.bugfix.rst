@@ -1,0 +1,1 @@
+Inline the definition of StrPath.

@@ -1,11 +1,14 @@
 import os
 import re
+import typing
 
 from build import util
 
+StrPath = typing.Union[str, 'os.PathLike[str]']
+
 
 def load(
-    source_dir: util.StrPath,
+    source_dir: StrPath,
     isolated: bool = os.environ.get('BUILD_ENVIRONMENT', 'isolated') == 'isolated',
     **kwargs,
 ):
