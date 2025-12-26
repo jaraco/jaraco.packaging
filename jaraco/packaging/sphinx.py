@@ -21,7 +21,6 @@ import sphinx.application
 import sphinx.config
 import sphinx.util.docutils
 from docutils.parsers.rst import directives
-
 from jaraco.context import suppress
 
 from . import metadata as jp_metadata
