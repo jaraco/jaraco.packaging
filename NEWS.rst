@@ -1,3 +1,19 @@
+v10.3.0
+=======
+
+Features
+--------
+
+- Complete annotations and add ``py.typed`` marker -- by :user:`Avasam` (#20)
+- Enabled strict type checking. (#20)
+
+
+Bugfixes
+--------
+
+- Inline the definition of StrPath. (#22)
+
+
 v10.2.3
 =======
 
