@@ -15,7 +15,6 @@ import docutils.statemachine
 import domdf_python_tools.stringlist
 import sphinx.util.docutils
 from docutils.parsers.rst import directives
-
 from jaraco.context import suppress
 
 from . import metadata as jp_metadata
