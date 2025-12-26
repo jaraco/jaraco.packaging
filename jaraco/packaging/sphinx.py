@@ -113,6 +113,7 @@ def _load_metadata_from_wheel() -> metadata.PackageMetadata:
         DeprecationWarning,
     )
     (dist,) = metadata.distributions(path=[wheel])
+    assert dist.metadata is not None
     return dist.metadata
 
 
