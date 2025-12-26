@@ -9,7 +9,7 @@ import itertools
 import json
 import sys
 from collections.abc import Iterable, Mapping
-from typing import TYPE_CHECKING, Any, Dict, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -33,7 +33,7 @@ def main() -> None:
     json.dump(pkgs.make_tree(root), sys.stdout)
 
 
-class Packages(Dict[str, Dict[str, Any]]):
+class Packages(dict[str, dict[str, Any]]):
     @classmethod
     def from_defn(cls, items: Iterable[dict[str, Any]]) -> Self:
         return cls(
