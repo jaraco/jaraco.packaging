@@ -1,10 +1,11 @@
 import subprocess
+from pathlib import Path
 
 import pytest
 
 
 @pytest.fixture
-def static_wheel(tmp_path, monkeypatch):
+def static_wheel(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     subprocess.check_call(
         ['pip', 'download', '--no-deps', '--dest', str(tmp_path), 'sampleproject'],
         stderr=subprocess.DEVNULL,

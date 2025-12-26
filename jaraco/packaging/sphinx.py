@@ -6,21 +6,32 @@ to conf.py, and the setup hook does the rest.
 True
 """
 
+from __future__ import annotations
+
 import os
 import warnings
-from importlib import metadata
-from typing import ClassVar
+from collections.abc import MutableMapping
+from typing import TYPE_CHECKING, ClassVar
 
+import docutils.nodes
 import docutils.statemachine
 import domdf_python_tools.stringlist
+import sphinx.addnodes
+import sphinx.application
+import sphinx.config
 import sphinx.util.docutils
 from docutils.parsers.rst import directives
 from jaraco.context import suppress
 
 from . import metadata as jp_metadata
 
+if TYPE_CHECKING:
+    import importlib_metadata as metadata
+else:
+    from importlib import metadata
 
-def setup(app):
+
+def setup(app: sphinx.application.Sphinx) -> dict[str, str | bool]:
     app.add_config_value('package_url', '', '')
     app.connect('config-inited', load_config_from_setup)
     app.connect('config-inited', configure_substitutions)
@@ -43,7 +54,7 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
         "caption": directives.unchanged_required,
     }
 
-    def run(self):
+    def run(self) -> list[sphinx.addnodes.only]:
         """
         Create the installation node.
         """
@@ -83,7 +94,7 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
 
 
 @suppress(KeyError)
-def _load_metadata_from_wheel():
+def _load_metadata_from_wheel() -> metadata.PackageMetadata:
     """
     If indicated by an environment variable, expect the metadata
     to be present in a wheel and load it from there, avoiding
@@ -102,10 +113,13 @@ def _load_metadata_from_wheel():
         DeprecationWarning,
     )
     (dist,) = metadata.distributions(path=[wheel])
+    assert dist.metadata is not None
     return dist.metadata
 
 
-def load_config_from_setup(app, config):
+def load_config_from_setup(
+    app: sphinx.application.Sphinx, config: sphinx.config.Config
+) -> None:
     """
     Replace values in app.config from package metadata
     """
@@ -118,10 +132,16 @@ def load_config_from_setup(app, config):
     config.author = config.copyright = jp_metadata.extract_author(meta)
 
 
-def configure_substitutions(app, config):
+def configure_substitutions(app: object, config: sphinx.config.Config) -> None:
     epilogs = config.rst_epilog, f'.. |project| replace:: {config.project}'
     config.rst_epilog = '\n'.join(filter(None, epilogs))
 
 
-def add_package_url(app, pagename, templatename, context, doctree):
+def add_package_url(
+    app: sphinx.application.Sphinx,
+    pagename: object,
+    templatename: object,
+    context: MutableMapping[str, str],
+    doctree: object,
+) -> None:
     context['package_url'] = app.config.package_url

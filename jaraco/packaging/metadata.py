@@ -1,34 +1,40 @@
+from __future__ import annotations
+
 import os
 import re
-import typing
+from collections.abc import Iterable
+from typing import TYPE_CHECKING
 
 from build import util
 
-StrPath = typing.Union[str, 'os.PathLike[str]']
+if TYPE_CHECKING:
+    from _typeshed import StrPath
+    from importlib_metadata import PackageMetadata
+    from pyproject_hooks import SubprocessRunner
 
 
 def load(
     source_dir: StrPath,
     isolated: bool = os.environ.get('BUILD_ENVIRONMENT', 'isolated') == 'isolated',
-    **kwargs,
-):
+    **kwargs: SubprocessRunner,
+) -> PackageMetadata:
     """
     Allow overriding the isolation behavior at the enviroment level.
     """
     return util.project_wheel_metadata(source_dir, isolated, **kwargs)
 
 
-def hunt_down_url(meta):
+def hunt_down_url(meta: PackageMetadata) -> str | None:
     """
     Given project metadata, figure out what the package URL is.
 
     >>> hunt_down_url(load('.'))
     'https://github.com/jaraco/jaraco.packaging'
     """
-    return meta.get('Home-page') or get_best(meta.get_all('Project-URL'))
+    return meta.get('Home-page') or get_best(meta.get_all('Project-URL', ()))
 
 
-def get_best(project_urls):
+def get_best(project_urls: Iterable[str]) -> str | None:
     lookup = dict(url.split(', ') for url in project_urls)
     return lookup.get('Source') or lookup.get('Homepage')
 
@@ -37,7 +43,7 @@ combo_re = r'["]?(?P<name>\w[\w\s.]*?)["]?\s+<(?P<email>\w+@[\w.]+)>'
 """The pattern for matching name and email from *-email fields."""
 
 
-def extract_author(meta):
+def extract_author(meta: PackageMetadata) -> str:
     """
     Given project metadata, figure out who the author is.
 
@@ -66,7 +72,7 @@ def extract_author(meta):
     )
 
 
-def extract_email(meta):
+def extract_email(meta: PackageMetadata) -> str:
     """
     Given project metadata, figure out the author's email.
 
