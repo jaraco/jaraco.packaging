@@ -33,6 +33,7 @@ else:
 
 def setup(app: sphinx.application.Sphinx) -> dict[str, str | bool]:
     app.add_config_value('package_url', '', '')
+    app.add_config_value('source_url', '', '')
     app.connect('config-inited', load_config_from_setup)
     app.connect('config-inited', configure_substitutions)
     app.connect('html-page-context', add_package_url)
@@ -79,7 +80,7 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
                     f"PyPI <https://pypi.org/project/{self.env.config.project}>"
                 )
             if "releases" in self.options:
-                source_url = self.env.config.package_url
+                source_url = self.env.config.source_url
                 if not source_url:
                     raise self.error(
                         "releases link requires a Source URL in project metadata"
@@ -137,6 +138,7 @@ def load_config_from_setup(
     config.project = meta['Name']
     config.version = config.release = meta['Version']
     config.package_url = jp_metadata.hunt_down_url(meta)
+    config.source_url = jp_metadata.get_source_url(meta)
     config.author = config.copyright = jp_metadata.extract_author(meta)
 
 
