@@ -51,6 +51,7 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
     option_spec = {
         "pypi": directives.flag,
         "home": directives.flag,
+        "releases": directives.flag,
         "caption": directives.unchanged_required,
     }
 
@@ -77,6 +78,13 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
                 body.append(
                     f"PyPI <https://pypi.org/project/{self.env.config.project}>"
                 )
+            if "releases" in self.options:
+                source_url = self.env.config.package_url
+                if not source_url:
+                    raise self.error(
+                        "releases link requires a Source URL in project metadata"
+                    )
+                body.append(f"Releases <{source_url}/releases>")
 
             body.extend(self.content)
 
