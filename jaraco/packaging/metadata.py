@@ -39,6 +39,20 @@ def get_best(project_urls: Iterable[str]) -> str | None:
     return lookup.get('Source') or lookup.get('Homepage')
 
 
+def get_source_url(meta: PackageMetadata) -> str | None:
+    """
+    Given project metadata, return the Source URL from Project-URL entries.
+
+    >>> get_source_url(load('.'))
+    'https://github.com/jaraco/jaraco.packaging'
+    >>> import email.message
+    >>> get_source_url(email.message.Message()) is None
+    True
+    """
+    lookup = dict(url.split(', ', 1) for url in meta.get_all('Project-URL', ()))
+    return lookup.get('Source')
+
+
 combo_re = r'["]?(?P<name>\w[\w\s.]*?)["]?\s+<(?P<email>\w+@[\w.]+)>'
 """The pattern for matching name and email from *-email fields."""
 

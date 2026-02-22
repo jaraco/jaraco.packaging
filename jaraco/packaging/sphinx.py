@@ -32,7 +32,17 @@ else:
 
 
 def setup(app: sphinx.application.Sphinx) -> dict[str, str | bool]:
+    """
+    >>> class MockApp:
+    ...     def add_config_value(self, *a): pass
+    ...     def connect(self, *a): pass
+    ...     def add_directive(self, *a): pass
+    >>> result = setup(MockApp())
+    >>> result['parallel_read_safe']
+    True
+    """
     app.add_config_value('package_url', '', '')
+    app.add_config_value('source_url', '', '')
     app.connect('config-inited', load_config_from_setup)
     app.connect('config-inited', configure_substitutions)
     app.connect('html-page-context', add_package_url)
@@ -51,12 +61,31 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
     option_spec = {
         "pypi": directives.flag,
         "home": directives.flag,
+        "releases": directives.flag,
         "caption": directives.unchanged_required,
     }
 
     def run(self) -> list[sphinx.addnodes.only]:
         """
         Create the installation node.
+
+        >>> from unittest.mock import MagicMock
+        >>> directive = object.__new__(SidebarLinksDirective)
+        >>> directive.state = MagicMock()
+        >>> env = directive.state.document.settings.env
+        >>> env.docname = env.config.master_doc = 'index'
+        >>> env.config.source_url = 'https://github.com/foo/bar'
+        >>> directive.options = {'releases': None}
+        >>> directive.content = []
+        >>> directive.content_offset = 0
+        >>> len(directive.run())  # one 'only' node wrapping the toctree
+        1
+        >>> env.config.source_url = ''
+        >>> from docutils.parsers.rst import DirectiveError
+        >>> directive.run()
+        Traceback (most recent call last):
+            ...
+        docutils.parsers.rst.DirectiveError
         """
 
         if self.env.docname != self.env.config.master_doc:
@@ -77,6 +106,13 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
                 body.append(
                     f"PyPI <https://pypi.org/project/{self.env.config.project}>"
                 )
+            if "releases" in self.options:
+                source_url = self.env.config.source_url
+                if not source_url:
+                    raise self.error(
+                        "releases link requires a Source URL in project metadata"
+                    )
+                body.append(f"Releases <{source_url}/releases>")
 
             body.extend(self.content)
 
@@ -122,6 +158,15 @@ def load_config_from_setup(
 ) -> None:
     """
     Replace values in app.config from package metadata
+
+    >>> class MockConfig:
+    ...     pass
+    >>> class MockApp:
+    ...     confdir = 'docs'
+    >>> config = MockConfig()
+    >>> load_config_from_setup(MockApp(), config)
+    >>> config.source_url
+    'https://github.com/jaraco/jaraco.packaging'
     """
     # for now, assume project root is one level up
     root = os.path.join(app.confdir, '..')
@@ -129,6 +174,7 @@ def load_config_from_setup(
     config.project = meta['Name']
     config.version = config.release = meta['Version']
     config.package_url = jp_metadata.hunt_down_url(meta)
+    config.source_url = jp_metadata.get_source_url(meta)
     config.author = config.copyright = jp_metadata.extract_author(meta)
 
 
