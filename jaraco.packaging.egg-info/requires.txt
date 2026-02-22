@@ -1,0 +1,34 @@
+build[virtualenv]
+jaraco.context
+sphinx
+domdf-python-tools
+
+[check]
+pytest-checkdocs>=2.4
+
+[check:sys_platform != "cygwin"]
+pytest-ruff>=0.2.1
+
+[cover]
+pytest-cov
+
+[doc]
+sphinx>=3.5
+jaraco.packaging>=9.3
+rst.linker>=1.9
+furo
+sphinx-lint
+
+[enabler]
+pytest-enabler>=3.4
+
+[test]
+pytest!=8.1.*,>=6
+types-docutils
+
+[type]
+pytest-mypy>=1.0.1
+importlib_metadata
+
+[type:platform_python_implementation == "PyPy"]
+mypy<1.19

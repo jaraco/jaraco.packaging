@@ -45,6 +45,9 @@ def get_source_url(meta: PackageMetadata) -> str | None:
 
     >>> get_source_url(load('.'))
     'https://github.com/jaraco/jaraco.packaging'
+    >>> import email.message
+    >>> get_source_url(email.message.Message()) is None
+    True
     """
     lookup = dict(url.split(', ', 1) for url in meta.get_all('Project-URL', ()))
     return lookup.get('Source')
