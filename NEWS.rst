@@ -1,3 +1,12 @@
+v10.4.0
+=======
+
+Features
+--------
+
+- Added ``releases`` option to ``sidebar-links`` directive, generating a link to the GitHub releases page from the ``Source`` URL in project metadata. (#23)
+
+
 v10.3.0
 =======
 
