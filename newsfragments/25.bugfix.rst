@@ -1,0 +1,1 @@
+Migrated ``metadata.load`` off the deprecated ``build.util.project_wheel_metadata`` to the recommended ``python -m build --metadata`` subprocess. **Breaking:** ``load`` and the consuming helpers now operate on the JSON core-metadata mapping (snake_case keys, ``project_urls`` as a mapping) instead of an ``email.message.Message``.

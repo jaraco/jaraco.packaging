@@ -130,7 +130,7 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
 
 
 @suppress(KeyError)
-def _load_metadata_from_wheel() -> metadata.PackageMetadata:
+def _load_metadata_from_wheel() -> jp_metadata.Metadata:
     """
     If indicated by an environment variable, expect the metadata
     to be present in a wheel and load it from there, avoiding
@@ -139,7 +139,7 @@ def _load_metadata_from_wheel() -> metadata.PackageMetadata:
     >>> _load_metadata_from_wheel()
     >>> getfixture('static_wheel')
     >>> meta = _load_metadata_from_wheel()
-    >>> meta['Name']
+    >>> meta['name']
     'sampleproject'
     """
     wheel = os.environ['JARACO_PACKAGING_SPHINX_WHEEL']
@@ -148,9 +148,8 @@ def _load_metadata_from_wheel() -> metadata.PackageMetadata:
         "use BUILD_ENVIRONMENT=current instead",
         DeprecationWarning,
     )
-    (dist,) = metadata.distributions(path=[wheel])
-    assert dist.metadata is not None
-    return dist.metadata
+    # ``build --metadata`` reads a wheel's metadata directly, without building.
+    return jp_metadata.load(wheel)
 
 
 def load_config_from_setup(
@@ -171,8 +170,8 @@ def load_config_from_setup(
     # for now, assume project root is one level up
     root = os.path.join(app.confdir, '..')
     meta = _load_metadata_from_wheel() or jp_metadata.load(root)
-    config.project = meta['Name']
-    config.version = config.release = meta['Version']
+    config.project = meta['name']
+    config.version = config.release = meta['version']
     config.package_url = jp_metadata.hunt_down_url(meta)
     config.source_url = jp_metadata.get_source_url(meta)
     config.author = config.copyright = jp_metadata.extract_author(meta)
