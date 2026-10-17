@@ -58,7 +58,7 @@ class SidebarLinksDirective(sphinx.util.docutils.SphinxDirective):
 
     has_content: ClassVar[bool] = True
 
-    option_spec = {
+    option_spec: ClassVar = {
         "pypi": directives.flag,
         "home": directives.flag,
         "releases": directives.flag,
