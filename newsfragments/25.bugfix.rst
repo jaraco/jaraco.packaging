@@ -1,0 +1,1 @@
+Reimplemented ``metadata.load`` on build's public ``ProjectBuilder`` API to avoid the deprecated ``build.util.project_wheel_metadata`` and its subprocess-based replacement, preserving the ``PackageMetadata`` return type.

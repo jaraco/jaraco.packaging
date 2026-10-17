@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 import os
+import pathlib
 import re
+import tempfile
 from collections.abc import Iterable
+from importlib import metadata as importlib_metadata
 from typing import TYPE_CHECKING
 
-from build import util
+import pyproject_hooks
+from build import ProjectBuilder
+from build.env import DefaultIsolatedEnv
 
 if TYPE_CHECKING:
     from _typeshed import StrPath
@@ -13,15 +18,39 @@ if TYPE_CHECKING:
     from pyproject_hooks import SubprocessRunner
 
 
+def _prepared_metadata(builder: ProjectBuilder) -> PackageMetadata:
+    """
+    Prepare the wheel metadata and load it in-process.
+    """
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = pathlib.Path(builder.metadata_path(tmpdir))
+        metadata = importlib_metadata.PathDistribution(path).metadata
+        assert metadata is not None
+        return metadata
+
+
 def load(
     source_dir: StrPath,
     isolated: bool = os.environ.get('BUILD_ENVIRONMENT', 'isolated') == 'isolated',
-    **kwargs: SubprocessRunner,
+    *,
+    runner: SubprocessRunner = pyproject_hooks.quiet_subprocess_runner,
 ) -> PackageMetadata:
     """
-    Allow overriding the isolation behavior at the enviroment level.
+    Load and return the metadata for the project at ``source_dir``.
+
+    Reimplements the (now deprecated) ``build.util.project_wheel_metadata``
+    in-process via build's public ``ProjectBuilder`` API, avoiding the
+    subprocess-based ``python -m build --metadata`` replacement and preserving
+    the ``PackageMetadata`` return type. Allows overriding the isolation
+    behavior at the environment level.
     """
-    return util.project_wheel_metadata(source_dir, isolated, **kwargs)
+    if not isolated:
+        return _prepared_metadata(ProjectBuilder(source_dir, runner=runner))
+    with DefaultIsolatedEnv() as env:
+        builder = ProjectBuilder.from_isolated_env(env, source_dir, runner=runner)
+        env.install(builder.build_system_requires)
+        env.install(builder.get_requires_for_build('wheel'))
+        return _prepared_metadata(builder)
 
 
 def hunt_down_url(meta: PackageMetadata) -> str | None:
