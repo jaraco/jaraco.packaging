@@ -21,7 +21,7 @@ def load(
     """
     Allow overriding the isolation behavior at the enviroment level.
     """
-    return util.project_wheel_metadata(source_dir, isolated, **kwargs)
+    return util.project_wheel_metadata(source_dir, isolated, **kwargs)  # type: ignore[return-value, unused-ignore]
 
 
 def hunt_down_url(meta: PackageMetadata) -> str | None:
